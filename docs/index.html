@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KataBumpUT — Auto Renew for free KataBump servers</title>
-<meta name="description" content="Free open-source tool that auto-renews your free KataBump server every 24h. Encrypted vault (AES-256-GCM), zero dependencies, Node 18+. Made by 6amirreza6.">
+<meta name="description" content="Free open-source panel that keeps your free KataBump servers alive — one-click browser renewal button + optional full-auto userscript. Zero files uploaded to KataBump. Encrypted vault (AES-256-GCM). Made by 6amirreza6.">
 <meta name="author" content="6amirreza6">
 <meta name="copyright" content="© 2026 6amirreza6 — all rights reserved (MIT) · github.com/6amirreza6/KatabumpUT">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='18' fill='%23a78bfa'/%3E%3Cellipse cx='32' cy='32' rx='30' ry='9' fill='none' stroke='%2322d3ee' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
@@ -69,11 +69,22 @@
   .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:999px;padding:5px 6px 5px 12px;font-family:var(--mono);font-size:.8rem;color:#a5f3fc;direction:ltr}
   .chip .x{cursor:pointer;border:0;background:rgba(255,255,255,.08);color:var(--dim);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;line-height:1;transition:.15s}
   .chip .x:hover{background:rgba(248,113,113,.28);color:#fca5a5}
-  .btn-build{width:100%;cursor:pointer;border:0;border-radius:12px;padding:13px;background:linear-gradient(90deg,var(--cyan),var(--green));color:#0b0e1e;font-weight:800;font-size:.95rem;font-family:inherit;transition:.2s;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px}
-  .btn-build:hover{filter:brightness(1.1);transform:translateY(-1px)}
-  .btn-build svg{width:17px;height:17px}
-  .btn-build:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:none}
-  .buildhint{color:#7c86a0;font-size:.75rem;margin-top:9px;line-height:1.75;text-align:center}
+  /* --- browser renew button (bookmarklet) — zero files inside KataBump --- */
+  .bm-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0 16px}
+  .bm-btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 22px;font-weight:800;font-size:.95rem;color:#0b0e1e;background:linear-gradient(90deg,var(--cyan),var(--green));border:1px dashed rgba(255,255,255,.4);cursor:grab;transition:.2s;user-select:none}
+  .bm-btn:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 30px rgba(34,211,238,.25)}
+  .btn-ghost{cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--txt);border-radius:11px;padding:10px 16px;font-weight:700;font-size:.85rem;font-family:inherit;transition:.2s}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+  details.auto{border:1px solid var(--line);border-radius:13px;padding:0 18px;background:rgba(255,255,255,.02);margin-top:6px}
+  details.auto summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:13px 0;list-style:none;color:var(--violet)}
+  details.auto summary::-webkit-details-marker{display:none}
+  details.auto .exp{margin:0 0 12px;font-size:.84rem}
+  .safe{display:flex;align-items:flex-start;gap:9px;margin-top:16px;padding:11px 14px;border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.07);border-radius:11px;color:#a7f3d0;font-size:.82rem;line-height:1.9}
+  .chip .left{color:#fbbf24;font-size:.72rem;font-family:var(--mono)}
+  .chip.due{border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.1)}
+  #remind{display:none;align-items:center;gap:10px;margin:0 0 18px;padding:13px 18px;border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.08);border-radius:13px;color:#fde68a;font-size:.9rem;font-weight:700;line-height:1.8}
+  #remind.show{display:flex}
+  #remind svg{width:20px;height:20px;flex-shrink:0}
   .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:11px 22px;font-weight:700;font-size:.95rem;border:1px solid var(--line);color:var(--txt);transition:.2s}
   .btn.primary{background:linear-gradient(90deg,rgba(167,139,250,.18),rgba(34,211,238,.18));border-color:rgba(167,139,250,.4)}
@@ -211,8 +222,8 @@
   <header class="hero wrap">
     <span class="pill"><span class="dot"></span><span data-i="pill">متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump</span></span>
     <h1 class="title">KataBumpUT</h1>
-    <p class="subtitle" data-i="hero_sub">سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.</p>
-    <p class="flowline" data-i="hero_flow">اسکریپت اختصاصی‌ت رو از <b>پنل حساب</b> بساز و دانلود کن — بدون حتی یک دستور ترمینالی.</p>
+    <p class="subtitle" data-i="hero_sub">سرور رایگان کاتابامپت رو <b>با یک کلیک</b> تمدید کن — اطلاعات رو وارد کن، سرورهات رو مدیریت کن و دکمه‌ی تمدید مرورگری رو بزن؛ <b>هیچ فایلی روی کاتابامپ</b> قرار نمی‌گیره.</p>
+    <p class="flowline" data-i="hero_flow">دکمه‌ی تمدید مرورگری رو از <b>پنل حساب</b> بگیر و همه‌ی سرورهات رو <b>با یک کلیک</b> تمدید کن — بدون حتی یک فایل روی کاتابامپ.</p>
     <div class="ctas">
       <a class="btn primary" href="https://github.com/6amirreza6/KatabumpUT" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.7 4.9 17.7 5.2 17.7 5.2c.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
@@ -227,27 +238,26 @@
       <span class="badge"><b>24h</b> · <span data-i="b1">چرخه‌ی خودکار</span></span>
       <span class="badge"><b>AES-256-GCM</b> · <span data-i="b2">گاوصخچه‌ی رمزنگاری</span></span>
       <span class="badge"><b>0</b> · <span data-i="b3">وابستگی</span></span>
-      <span class="badge"><b>Node 18+</b></span>
+      <span class="badge"><b>0</b> · <span data-i="b5">فایل روی کاتابامپ</span></span>
       <span class="badge"><b>MIT</b> · <span data-i="b4">© تمام حقوق برای 6amirreza6</span></span>
     </div>
     <span class="wm" aria-hidden="true">6amirreza6</span>
   </header>
 
   <div class="wrap panel">
-    <h2 data-i="panel_h">پنل پرواز</h2>
-    <p class="hint" data-i="panel_hint">اسکریپت شخصی‌ای که از پنل حساب می‌سازی، روی هاست این‌طور اجرا می‌شه — بدون حتی یک تایپ.</p>
+    <h2 data-i="panel_h">تمدید با یک کلیک</h2>
+    <p class="hint" data-i="panel_hint">دکمه‌ی تمدید مرورگری، توی داشبورد کاتابامپ همه‌ی دکمه‌های Renew رو خودکار کلیک می‌کنه — دقیقاً مثل خودت، فقط سریع‌تر و بدون فراموشی.</p>
     <span class="wm" aria-hidden="true">6amirreza6</span>
     <div class="pgrid">
       <div class="term">
-        <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>KataBump Server — node index.js</span></div>
-        <pre><span class="cm">$</span> node index.js
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>dashboard.katabump.com — ⚡ Renew my servers</span></div>
+        <pre><span class="cm">dashboard.katabump.com/servers</span> — bookmarklet
 
 <span class="st">★</span> Made by 6amirreza6 on GitHub
-<span class="st">✦</span> Personal vault unsealed — AES-256-GCM
-<span class="q">🔑</span> No valid session — logging in...
-<span class="ok">✓</span> Login successful.
-<span class="ok">✦</span> Renew successful! Next run in 24h.
-<span class="cm">⌨</span> renew · status · delete · exit <span class="cursor"></span></pre>
+<span class="q">⚡</span> "Renew my servers" clicked
+<span class="ok">✓</span> 3 renew buttons pressed — confirmed
+<span class="ok">✦</span> Synced back to your panel — 4d timer reset
+<span class="cm">0 files uploaded to katabump · ban-safe</span> <span class="cursor"></span></pre>
       </div>
       <div class="stats">
         <div class="stat">
@@ -256,11 +266,11 @@
         </div>
         <div class="stat">
           <div class="ic v"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <div><b data-i="st2">گاوصخچه: قفل و ایمن</b><span>AES-256-GCM · key split ×2</span></div>
+          <div><b data-i="st2">بدون فایل روی کاتابامپ</b><span>zero files · ban-safe</span></div>
         </div>
         <div class="stat">
           <div class="ic g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <div><b data-i="st3">سرور: زنده و تمدیدشده</b><span>status · ok</span></div>
+          <div><b data-i="st3">همگام‌سازی خودکار با پنل</b><span>sync · automatic</span></div>
         </div>
       </div>
     </div>
@@ -269,8 +279,9 @@
   <section class="sec" id="account">
     <div class="wrap">
       <h2 data-i="acc_h">پنل حساب من</h2>
-      <p class="lead" data-i="acc_lead">همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، اکانتت رو بساز و هر وقت خواستی سرور اضافه یا حذف کن، بعد اسکریپت شخصی‌ت رو بگیر. هیچ‌چیز از مرورگرت بیرون نمی‌ره.</p>
+      <p class="lead" data-i="acc_lead">همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، سرورهات رو اضافه یا حذف کن و با دکمه‌ی تمدید مرورگری همه‌شون رو با یک کلیک تمدید کن — بدون حتی یک فایل روی کاتابامپ.</p>
       <span class="wm" aria-hidden="true">6amirreza6</span>
+      <div id="remind" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span data-i="remind_txt">وقت تمدیده! دکمه‌ی «تمدید سرورهای من» رو توی داشبورد کاتابامپ بزن.</span></div>
       <div class="acc-grid">
         <div class="acc-card">
           <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span data-i="acc1_h">ورود اطلاعات حساب</span></h3>
@@ -303,12 +314,22 @@
           <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 15h.01M11 15h6"/><circle cx="9" cy="10" r="1.6"/></svg></span><span data-i="acc2_h">اطلاعات حساب</span></h3>
           <p class="exp" data-i="acc2_exp">اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.</p>
           <div id="accInfo"></div>
-          <button class="btn-build" id="btnBuild" type="button" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-            <span data-i="btn_build">ساخت و دانلود اسکریپت (index.js)</span>
-          </button>
-          <div class="buildhint" data-i="build_hint">این دکمه یک index.js شخصی‌سازی‌شده می‌سازه: اطلاعات تو داخلش با AES-256-GCM قفل شده — فقط در تب Files پنل کاتابامپ آپلودش کن و Restart بزن؛ نه ترمینال، نه تایپ. این فایل مخصوص خودته، جایی نفرستش.</div>
         </div>
+      </div>
+      <div class="acc-card renewcard">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span data-i="bm_h">دکمه‌ی تمدید مرورگری</span></h3>
+        <p class="exp" data-i="bm_exp">این دکمه رو بکش و بنداز توی نوار بوکمارک‌های مرورگرت. حالا هر وقت وارد داشبورد کاتابامپ شدی روش کلیک کن: همه‌ی دکمه‌های Renew صفحه خودکار زده می‌شن و نتیجه‌ش خودکار به همین پنل برمی‌گرده. هیچ فایلی روی کاتابامپ آپلود یا اجرا نمی‌شه — صفرِ صفر.</p>
+        <div class="bm-row">
+          <a id="bmLink" class="bm-btn" href="#" title="KataBumpUT — Made by 6amirreza6 on GitHub">⚡ <span data-i="bm_drag">تمدید سرورهای من</span></a>
+          <button class="btn-ghost" id="btnCopyBm" type="button" data-i="bm_copy">کپی کد دکمه</button>
+        </div>
+        <div class="kv"><span class="k" data-i="bm_last">آخرین تمدید ثبت‌شده</span><span class="v" id="lastRenew">—</span></div>
+        <details class="auto">
+          <summary data-i="bm_auto_h">حالت کاملاً خودکار (بدون کلیک) — پیشرفته</summary>
+          <p class="exp" data-i="bm_auto_exp">افزونه‌ی رایگان Tampermonkey رو توی مرورگرت نصب کن، بعد دکمه‌ی زیر رو بزن و اسکریپت رو به‌عنوان یه اسکریپت جدید توی Tampermonkey ذخیره کن. از این به بعد هر وقت داشبورد کاتابامپ باز باشه، تمدید خودش انجام می‌شه — بدون حتی یک کلیک. این هم فقط توی مرورگر خودته و هیچ فایلی روی کاتابامپ نمی‌ره.</p>
+          <div class="bm-row"><button class="btn-ghost" id="btnCopyUs" type="button" data-i="bm_copy2">کپی اسکریپت خودکار (Tampermonkey)</button></div>
+        </details>
+        <div class="safe">🛡️ <span data-i="bm_safe">امن و بدون بن: هیچ فایلی داخل کاتابامپ قرار نمی‌گیره — نه آپلود، نه اجرا؛ فقط همون کلیک‌های معمولی Renew، توی مرورگر خودت.</span></div>
       </div>
       <div class="acc-card acc-danger">
         <div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
@@ -327,11 +348,11 @@
       <span class="wm" aria-hidden="true">6amirreza6</span>
       <p class="lead" data-i="feat_lead"></p>
       <div class="grid3">
-        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3 data-i="f1_h">چرخه‌ی ۲۴ ساعته</h3><p data-i="f1_p">هر شب یه دور تمدید؛ اگه یه تلاش شکست بخوره، ۱۵ دقیقه بعد دوباره امتحان می‌کنه تا بالاخره بشه.</p></div>
-        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3 data-i="f2_h">گاوصخچه‌ی رمزنگاری‌شده</h3><p data-i="f2_p">ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده روی دیسک نمی‌شینه؛ با AES-256-GCM قفل می‌شن و کلیدشون دو تکه می‌شه.</p></div>
-        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div><h3 data-i="f3_h">صفر وابستگی</h3><p data-i="f3_p">یک فایل mjs. بدون npm install، بدون پکیج — روی رم ۳۰۸ مگی هاست رایگان هم راحت نفس می‌کشه.</p></div>
-        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 data-i="f4_h">عبور از کپچا</h3><p data-i="f4_p">اگه پنل کپچای Turnstile بیاره، حالت مرورگر <code class="k">--login</code> خودش اون رو حل می‌کنه.</p></div>
-        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h3 data-i="f5_h">رفتار مودبانه</h3><p data-i="f5_p">فقط با اکانت خودت، با فاصله‌ی منطقی بین درخواست‌ها — نه اسپم، نه فشار روی پنل.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3 data-i="f1_h">یادآور ۴ روزه</h3><p data-i="f1_p">سایت زمان تمدید هر سرور رو دنبال می‌کنه و قبل از پایان مهلت ۴ روزه بهت هشدار می‌ده که دکمه‌ی تمدید رو بزنی.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3 data-i="f2_h">گاوصخچه‌ی رمزنگاری‌شده</h3><p data-i="f2_p">ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده ذخیره نمی‌شن؛ با AES-256-GCM قفل می‌شن و کلید فقط توی مرورگر خودت می‌مونه.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div><h3 data-i="f3_h">هیچ فایلی روی کاتابامپ</h3><p data-i="f3_p">هیچ اسکریپتی روی هاست آپلود یا اجرا نمی‌شه؛ همه‌چیز فقط توی مرورگر خودته — هیچ ردی که باعث بن شدن بشه وجود نداره.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 data-i="f4_h">همگام‌سازی خودکار</h3><p data-i="f4_p">بعد از هر تمدید، نتیجه خودکار به پنل حساب سایت برمی‌گرده و شمارش معکوس ۴ روزه از نو شروع می‌شه.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h3 data-i="f5_h">رفتار مودبانه</h3><p data-i="f5_p">فقط همون دکمه‌های Renew اکانت خودت کلیک می‌شن، با فاصله‌ی منطقی — نه اسپم، نه فشار روی پنل.</p></div>
         <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg></div><h3 data-i="f6_h">چند سرور با هم</h3><p data-i="f6_p">چند تا سرور رایگان داری؟ شناسه‌هاشون رو با کاما وارد کن تا همه تمدید بشن.</p></div>
       </div>
     </div>
@@ -344,12 +365,12 @@
         <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg></div>
         <div>
           <h3 data-i="sec_h">اطلاعاتت، قفسه‌ی رمزی خودش</h3>
-          <p data-i="sec_p">وقتی setup رو تمام می‌کنی، یک کلید ۲۵۶ بیتی تصادفی ساخته می‌شه و اطلاعات با AES-256-GCM رمز می‌شه. کلید به دو نیمه تقسیم و در دو جای مخفی و جدا نگه‌داری می‌شه — پس پیدا کردن یک فایل به‌تنهایی هیچی رو لو نمی‌ده.</p>
+          <p data-i="sec_p">وقتی اطلاعات رو ذخیره می‌کنی، یک کلید ۲۵۶ بیتی تصادفی ساخته می‌شه و همه‌چیز با AES-256-GCM رمز می‌شه؛ کلید فقط توی مرورگر خودت می‌مونه و هیچ‌وقت به هیچ سروری ارسال نمی‌شه — پس هیچ‌کس به جز خودت بهش دسترسی نداره.</p>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l1">هیچ متن ساده‌ای روی دیسک: نه ایمیل، نه رمز، نه شناسه</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l1">هیچ متن ساده‌ای ذخیره نمی‌شه: نه ایمیل، نه رمز، نه شناسه</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l2">رمزنگاری احراز‌شده (GCM) — دستکاری فایل قابل تشخیصه</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l3">اطلاعات فقط به خود dashboard.katabump.com می‌ره</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l4">با <code class="k">--delete</code> یا تایپ <code class="k">delete</code> در کنسول، همه‌چیز همان لحظه و بدون رد پا پاک می‌شه</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l3">هیچ داده‌ای از مرورگرت خارج نمی‌شه — نه به کاتابامپ، نه هیچ‌جای دیگه</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l4">با دکمه‌ی «حذف اطلاعات من»، داده و کلید رمزنگاری همان لحظه و بدون رد پا نابود می‌شن</span></li>
           </ul>
         </div>
       </div>
@@ -363,19 +384,19 @@
       <p class="lead" data-i="faq_lead">چیزهایی که بیشتر از همه پرسیده می‌شه.</p>
       <details>
         <summary><span data-i="q1">شناسه‌ی سرور (Server ID) رو از کجا پیدا کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a1">وارد پنل katabump.com شو و روی سرورت کلیک کن — توی آدرس مرورگر یه چیزی مثل dashboard.katabump.com/server/84521 می‌بینی. همون 84521 شناسه‌ی سرورته. اگه هم خالی بذاری، اسکریپت خودش دنبالش می‌گرده.</div>
+        <div class="a" data-i="a1">وارد پنل katabump.com شو و روی سرورت کلیک کن — توی آدرس مرورگر یه چیزی مثل dashboard.katabump.com/server/84521 می‌بینی. همون 84521 شناسه‌ی سرورته. خالی گذاشتنش هم اشکالی نداره — دکمه‌ی تمدید خودش همه‌ی سرورهای اکانتت رو پوشش می‌ده.</div>
       </details>
       <details>
         <summary><span data-i="q2">آیا رمزم امن می‌مونه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
         <div class="a" data-i="a2">رمزت با AES-256-GCM رمز می‌شه و کلیدش دو تکه و در دو مسیر جدا ذخیره می‌شه؛ هیچ‌جا به‌صورت متن ساده نوشته نمی‌شه و به هیچ سروری غیر از کاتابامپ هم فرستاده نمی‌شه. فقط یادت باشه این ابزار متن‌بازه — کسی که به کل سرور (شل کامل) دسترسی داشته باشه، مثل هر ابزار خودکاری، می‌تونه از همون مسیرها استفاده کنه.</div>
       </details>
       <details>
-        <summary><span data-i="q3">اگه کپچا بیاد چی؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a3">فایل index.js ساخته‌شده رو یه بار روی کامپیوتر خودت با <code class="k">node index.js --login</code> اجرا کن (فقط اونجا playwright لازمه). یه مرورگر مخفی کپچای Turnstile رو خودکار حل می‌کنه و سشن ذخیره می‌شه؛ بعدش روی هاست هم از همون سشن استفاده می‌شه. بدون این هم اسکریپت هر ۱۵ دقیقه خودش دوباره تلاش می‌کنه.</div>
+        <summary><span data-i="q3">تمدید خودکار چطور انجام می‌شه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a3">از پنل حساب، دکمه‌ی «⚡ تمدید سرورهای من» رو بکش و بنداز توی نوار بوکمارک‌های مرورگرت. حالا هر وقت وارد داشبورد کاتابامپ شدی همون دکمه رو بزن: همه‌ی دکمه‌های Renew صفحه خودکار کلیک می‌شن و نتیجه هم خودکار به همین سایت برمی‌گرده. هیچ فایلی جایی آپلود نمی‌شه.</div>
       </details>
       <details>
-        <summary><span data-i="q4">روی کامپیوتر خودم هم کار می‌کنه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a4">آره! از پنل حساب، index.js رو دانلود کن و روی کامپیوترت <code class="k">node index.js</code> رو بزن — همون‌طور هر ۲۴ ساعت خودش تمدید می‌کنه. برای ساخت سشن کپچا هم با <code class="k">--login</code> همینه.</div>
+        <summary><span data-i="q4">می‌شه کلاً بدون کلیک باشه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a4">آره — حالت پیشرفته: افزونه‌ی رایگان Tampermonkey رو نصب کن و اسکریپت خودکار رو از پنل حساب کپی کن. از اون به بعد هر وقت داشبورد کاتابامپ باز باشه، تمدید خودش انجام می‌شه — بدون حتی یک کلیک. این هم فقط توی مرورگر خودته.</div>
       </details>
       <details>
         <summary><span data-i="q5">قوانین کاتابامپ چی؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -383,15 +404,15 @@
       </details>
       <details>
         <summary><span data-i="q6">چطور اطلاعات خودم رو حذف کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a6">همه‌چیز خودکاره: ۱) توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن. ۲) برای اسکریپت: توی کنسولش بنویس <code class="k">delete</code> یا یک‌بار <code class="k">node index.js --delete</code> رو اجرا کن — فایل شخصی و سشن همان لحظه پاک می‌شن؛ اگه حذف خودکار ممکن نشد، فقط index.js رو از تب Files پنل پاک کن.</div>
+        <div class="a" data-i="a6">توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن؛ همه‌ی داده‌ها و کلید رمزنگاری همان لحظه، خودکار و بدون هیچ سؤالی برای همیشه پاک می‌شن. و چون هیچ فایلی روی کاتابامپ نیست، اون‌جا هم چیزی برای پاک کردن وجود نداره.</div>
       </details>
       <details>
         <summary><span data-i="q7">اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
         <div class="a" data-i="a7">هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.</div>
       </details>
       <details>
-        <summary><span data-i="q8">اسکریپت ساخته‌شده رو چطور روی سرور بذارم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a8">نه ترمینال، نه دستور: پنل کاتابامپ → تب Files → فایل index.js رو Upload کن → Restart بزن. تمام! از این به بعد هر ۲۴ ساعت خودش تمدید می‌کنه. برای تغییر اطلاعات هم همین‌جا توی سایت به‌روزرسانی کن و فایل جدید رو جایگزین قبلی کن.</div>
+        <summary><span data-i="q8">این کار باعث بن شدن می‌شه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a8">نه فایلی روی کاتابامپ آپلود می‌شه، نه کدی روی هاست اجرا می‌شه — دکمه‌ی تمدید فقط همون دکمه‌های Renew رو توی مرورگر خودت کلیک می‌کنه؛ همون‌کاری که خودت هم دستی می‌کنی. با این حال مثل هر ابزاری، ازش فقط برای اکانت خودت استفاده کن؛ مسئولیت استفاده با خودته.</div>
       </details>
     </div>
   </section>
@@ -463,16 +484,17 @@
 /* ---- i18n ---- */
 const I18N = {
   fa: {
-    hero_flow: 'اسکریپت اختصاصی‌ت رو از <b>پنل حساب</b> بساز و دانلود کن — بدون حتی یک دستور ترمینالی.',
+    hero_flow: 'دکمه‌ی تمدید مرورگری رو از <b>پنل حساب</b> بگیر و همه‌ی سرورهات رو <b>با یک کلیک</b> تمدید کن — بدون حتی یک فایل روی کاتابامپ.',
     nav_account: 'حساب من', nav_sec: 'امنیت', nav_faq: 'سؤالات',
     pill: 'متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump',
-    hero_sub: 'سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.',
+    hero_sub: 'سرور رایگان کاتابامپت رو <b>با یک کلیک</b> تمدید کن — اطلاعات رو وارد کن، سرورهات رو مدیریت کن و دکمه‌ی تمدید مرورگری رو بزن؛ <b>هیچ فایلی روی کاتابامپ</b> قرار نمی‌گیره.',
     cta_gh: 'مشاهده در گیتهاب', cta_acc: 'پنل حساب',
     b1: 'چرخه‌ی خودکار', b2: 'گاوصخچه‌ی رمزنگاری', b3: 'وابستگی', b4: '© تمام حقوق برای 6amirreza6',
-    panel_h: 'پنل پرواز', panel_hint: 'اسکریپت شخصی‌ای که از پنل حساب می‌سازی، روی هاست این‌طور اجرا می‌شه — بدون حتی یک تایپ.',
-    st1: 'تمدید بعدی تا', st2: 'گاوصخچه: قفل و ایمن', st3: 'سرور: زنده و تمدیدشده',
+    b5: 'فایل روی کاتابامپ',
+    panel_h: 'تمدید با یک کلیک', panel_hint: 'دکمه‌ی تمدید مرورگری، توی داشبورد کاتابامپ همه‌ی دکمه‌های Renew رو خودکار کلیک می‌کنه — دقیقاً مثل خودت، فقط سریع‌تر و بدون فراموشی.',
+    st1: 'تمدید بعدی تا', st2: 'بدون فایل روی کاتابامپ', st3: 'همگام‌سازی خودکار با پنل',
     acc_h: 'پنل حساب من',
-    acc_lead: 'همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، اکانتت رو بساز و هر وقت خواستی سرور اضافه یا حذف کن، بعد اسکریپت شخصی‌ت رو بگیر. هیچ‌چیز از مرورگرت بیرون نمی‌ره.',
+    acc_lead: 'همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، سرورهات رو اضافه یا حذف کن و با دکمه‌ی تمدید مرورگری همه‌شون رو با یک کلیک تمدید کن — بدون حتی یک فایل روی کاتابامپ.',
     acc1_h: 'ورود اطلاعات حساب',
     acc1_exp: 'ایمیل و رمز اکانت کاتابامپت و شناسه‌ی سرورت رو وارد کن و «ذخیره در گاوصخچه» رو بزن؛ اطلاعات همین لحظه با AES-256-GCM رمز می‌شه و فقط توی مرورگر خودت قفل می‌شه — هیچ سروری در کار نیست.',
     lbl_email: 'ایمیل کاتابامپ',
@@ -483,16 +505,25 @@ const I18N = {
     hint_sid: 'عدد آخر آدرس سرورت توی پنل، مثل /server/84521 — هر بار یکی رو وارد کن و + رو بزن. افزودن، حذف و تغییر سرورها همین‌جاست و خالی بودنش هم اشکالی نداره.',
     btn_save: 'ذخیره در گاوصخچه',
     chips_none: 'هنوز سروری اضافه نشده',
+    remind_txt: '⏰ وقت تمدیده! دکمه‌ی «تمدید سرورهای من» رو توی داشبورد کاتابامپ بزن.',
+    bm_h: 'دکمه‌ی تمدید مرورگری',
+    bm_exp: 'این دکمه رو بکش و بنداز توی نوار بوکمارک‌های مرورگرت. حالا هر وقت وارد داشبورد کاتابامپ شدی روش کلیک کن: همه‌ی دکمه‌های Renew صفحه خودکار زده می‌شن و نتیجه‌ش خودکار به همین پنل برمی‌گرده. هیچ فایلی روی کاتابامپ آپلود یا اجرا نمی‌شه — صفرِ صفر.',
+    bm_drag: 'تمدید سرورهای من',
+    bm_copy: 'کپی کد دکمه',
+    bm_copied: 'کد دکمه کپی شد — توی مرورگرت به‌عنوان بوکمارک جدید ذخیره‌اش کن ✓',
+    bm_copyfail: 'کپی نشد — مرورگرت اجازه نداد؛ دوباره امتحان کن',
+    bm_last: 'آخرین تمدید ثبت‌شده',
+    bm_auto_h: 'حالت کاملاً خودکار (بدون کلیک) — پیشرفته',
+    bm_auto_exp: 'افزونه‌ی رایگان Tampermonkey رو توی مرورگرت نصب کن، بعد دکمه‌ی زیر رو بزن و اسکریپت رو به‌عنوان یه اسکریپت جدید توی Tampermonkey ذخیره کن. از این به بعد هر وقت داشبورد کاتابامپ باز باشه، تمدید خودش انجام می‌شه — بدون حتی یک کلیک. این هم فقط توی مرورگر خودته و هیچ فایلی روی کاتابامپ نمی‌ره.',
+    bm_copy2: 'کپی اسکریپت خودکار (Tampermonkey)',
+    bm_safe: 'امن و بدون بن: هیچ فایلی داخل کاتابامپ قرار نمی‌گیره — نه آپلود، نه اجرا؛ فقط همون کلیک‌های معمولی Renew، توی مرورگر خودت.',
+    renew_ok: 'تمدید ثبت شد — تایمر ۴ روزه از نو شروع شد ✓',
     remove: 'حذف',
     added_srv: 'سرور اضافه شد ✓',
     removed_srv: 'سرور حذف شد',
     dup_srv: 'این سرور قبلاً اضافه شده',
     ph_pw_keep: 'برای تغییر، رمز جدید را وارد کن',
     updated_toast: 'اطلاعات حسابت به‌روزرسانی شد ✓',
-    btn_build: 'ساخت و دانلود اسکریپت (index.js)',
-    build_hint: 'این دکمه یک index.js شخصی‌سازی‌شده می‌سازه: اطلاعات تو داخلش با AES-256-GCM قفل شده — فقط در تب Files پنل کاتابامپ آپلودش کن و Restart بزن؛ نه ترمینال، نه تایپ. این فایل مخصوص خودته، جایی نفرستش.',
-    build_toast: 'index.js ساخته شد و دانلود شد — حالا در تب Files پنل کاتابامپ آپلودش کن و Restart بزن ✓',
-    build_err: 'ساخت اسکریپت ناموفق بود — دوباره امتحان کن',
     acc2_h: 'اطلاعات حساب',
     acc2_exp: 'اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.',
     kv_email: 'ایمیل', kv_pw: 'رمز', kv_sid: 'شناسه‌ی سرور', kv_enc: 'وضعیت', kv_at: 'ذخیره در',
@@ -507,50 +538,51 @@ const I18N = {
     err_pw: 'رمز اکانت رو وارد کن',
     err_sid: 'شناسه‌ی سرور فقط باید عدد باشه؛ برای چند سرور با کاما جدا کن',
     feat_h: 'چرا خفنه؟',
-    f1_h: 'چرخه‌ی ۲۴ ساعته', f1_p: 'هر شب یه دور تمدید؛ اگه یه تلاش شکست بخوره، ۱۵ دقیقه بعد دوباره امتحان می‌کنه تا بالاخره بشه.',
-    f2_h: 'گاوصخچه‌ی رمزنگاری‌شده', f2_p: 'ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده روی دیسک نمی‌شینه؛ با AES-256-GCM قفل می‌شن و کلیدشون دو تکه می‌شه.',
-    f3_h: 'صفر وابستگی', f3_p: 'یک فایل mjs. بدون npm install، بدون پکیج — روی رم ۳۰۸ مگی هاست رایگان هم راحت نفس می‌کشه.',
-    f4_h: 'عبور از کپچا', f4_p: 'اگه پنل کپچای Turnstile بیاره، حالت مرورگر --login خودش اون رو حل می‌کنه.',
-    f5_h: 'رفتار مودبانه', f5_p: 'فقط با اکانت خودت، با فاصله‌ی منطقی بین درخواست‌ها — نه اسپم، نه فشار روی پنل.',
+    f1_h: 'یادآور ۴ روزه', f1_p: 'سایت زمان تمدید هر سرور رو دنبال می‌کنه و قبل از پایان مهلت ۴ روزه بهت هشدار می‌ده که دکمه‌ی تمدید رو بزنی.',
+    f2_h: 'گاوصخچه‌ی رمزنگاری‌شده', f2_p: 'ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده ذخیره نمی‌شن؛ با AES-256-GCM قفل می‌شن و کلید فقط توی مرورگر خودت می‌مونه.',
+    f3_h: 'هیچ فایلی روی کاتابامپ', f3_p: 'هیچ اسکریپتی روی هاست آپلود یا اجرا نمی‌شه؛ همه‌چیز فقط توی مرورگر خودته — هیچ ردی که باعث بن شدن بشه وجود نداره.',
+    f4_h: 'همگام‌سازی خودکار', f4_p: 'بعد از هر تمدید، نتیجه خودکار به پنل حساب سایت برمی‌گرده و شمارش معکوس ۴ روزه از نو شروع می‌شه.',
+    f5_h: 'رفتار مودبانه', f5_p: 'فقط همون دکمه‌های Renew اکانت خودت کلیک می‌شن، با فاصله‌ی منطقی — نه اسپم، نه فشار روی پنل.',
     f6_h: 'چند سرور با هم', f6_p: 'چند تا سرور رایگان داری؟ شناسه‌هاشون رو با کاما وارد کن تا همه تمدید بشن.',
     sec_h: 'اطلاعاتت، قفسه‌ی رمزی خودش',
-    sec_p: 'وقتی setup رو تمام می‌کنی، یک کلید ۲۵۶ بیتی تصادفی ساخته می‌شه و اطلاعات با AES-256-GCM رمز می‌شه. کلید به دو نیمه تقسیم و در دو جای مخفی و جدا نگه‌داری می‌شه — پس پیدا کردن یک فایل به‌تنهایی هیچی رو لو نمی‌ده.',
-    sec_l1: 'هیچ متن ساده‌ای روی دیسک: نه ایمیل، نه رمز، نه شناسه',
+    sec_p: 'وقتی اطلاعات رو ذخیره می‌کنی، یک کلید ۲۵۶ بیتی تصادفی ساخته می‌شه و همه‌چیز با AES-256-GCM رمز می‌شه؛ کلید فقط توی مرورگر خودت می‌مونه و هیچ‌وقت به هیچ سروری ارسال نمی‌شه — پس هیچ‌کس به جز خودت بهش دسترسی نداره.',
+    sec_l1: 'هیچ متن ساده‌ای ذخیره نمی‌شه: نه ایمیل، نه رمز، نه شناسه',
     sec_l2: 'رمزنگاری احرازشده (GCM) — دستکاری فایل قابل تشخیصه',
-    sec_l3: 'اطلاعات فقط به خود dashboard.katabump.com می‌ره',
-    sec_l4: 'با --delete یا تایپ delete در کنسول، همه‌چیز همان لحظه و بدون رد پا پاک می‌شه',
+    sec_l3: 'هیچ داده‌ای از مرورگرت خارج نمی‌شه — نه به کاتابامپ، نه هیچ‌جای دیگه',
+    sec_l4: 'با دکمه‌ی «حذف اطلاعات من»، داده و کلید رمزنگاری همان لحظه و بدون رد پا نابود می‌شن',
     faq_h: 'سؤالات پرتکرار',
     faq_lead: 'چیزهایی که بیشتر از همه پرسیده می‌شه.',
     q1: 'شناسه‌ی سرور (Server ID) رو از کجا پیدا کنم؟',
-    a1: 'وارد پنل katabump.com شو و روی سرورت کلیک کن — توی آدرس مرورگر یه چیزی مثل dashboard.katabump.com/server/84521 می‌بینی. همون 84521 شناسه‌ی سرورته. اگه هم خالی بذاری، اسکریپت خودش دنبالش می‌گرده.',
+    a1: 'وارد پنل katabump.com شو و روی سرورت کلیک کن — توی آدرس مرورگر یه چیزی مثل dashboard.katabump.com/server/84521 می‌بینی. همون 84521 شناسه‌ی سرورته. خالی گذاشتنش هم اشکالی نداره — دکمه‌ی تمدید خودش همه‌ی سرورهای اکانتت رو پوشش می‌ده.',
     q2: 'آیا رمزم امن می‌مونه؟',
     a2: 'رمزت با AES-256-GCM رمز می‌شه و کلیدش دو تکه و در دو مسیر جدا ذخیره می‌شه؛ هیچ‌جا به‌صورت متن ساده نوشته نمی‌شه و به هیچ سروری غیر از کاتابامپ هم فرستاده نمی‌شه. فقط یادت باشه این ابزار متن‌بازه — کسی که به کل سرور (شل کامل) دسترسی داشته باشه، مثل هر ابزار خودکاری، می‌تونه از همون مسیرها استفاده کنه.',
-    q3: 'اگه کپچا بیاد چی؟',
-    a3: 'فایل index.js ساخته‌شده رو یه بار روی کامپیوتر خودت با node index.js --login اجرا کن (فقط اونجا playwright لازمه). یه مرورگر مخفی کپچای Turnstile رو خودکار حل می‌کنه و سشن ذخیره می‌شه؛ بعدش روی هاست هم از همون سشن استفاده می‌شه. بدون این هم اسکریپت هر ۱۵ دقیقه خودش دوباره تلاش می‌کنه.',
-    q4: 'روی کامپیوتر خودم هم کار می‌کنه؟',
-    a4: 'آره! از پنل حساب، index.js رو دانلود کن و روی کامپیوترت node index.js رو بزن — همون‌طور هر ۲۴ ساعت خودش تمدید می‌کنه. برای ساخت سشن کپچا هم با --login همینه.',
+    q3: 'تمدید خودکار چطور انجام می‌شه؟',
+    a3: 'از پنل حساب، دکمه‌ی «⚡ تمدید سرورهای من» رو بکش و بنداز توی نوار بوکمارک‌های مرورگرت. حالا هر وقت وارد داشبورد کاتابامپ شدی همون دکمه رو بزن: همه‌ی دکمه‌های Renew صفحه خودکار کلیک می‌شن و نتیجه هم خودکار به همین سایت برمی‌گرده. هیچ فایلی جایی آپلود نمی‌شه.',
+    q4: 'می‌شه کلاً بدون کلیک باشه؟',
+    a4: 'آره — حالت پیشرفته: افزونه‌ی رایگان Tampermonkey رو نصب کن و اسکریپت خودکار رو از پنل حساب کپی کن. از اون به بعد هر وقت داشبورد کاتابامپ باز باشه، تمدید خودش انجام می‌شه — بدون حتی یک کلیک. این هم فقط توی مرورگر خودته.',
     q5: 'قوانین کاتابامپ چی؟',
     a5: 'این ابزار فقط برای سرور و اکانت خودته و رفتارش عمداً ملایمه (حداقل ۲۳ ساعت بین تمدیدهای موفق). با این حال اتوماسیون ممکنه با قوانین هر سرویسی ناسازگار باشه — مسئولیت استفاده با خودته.',
     q6: 'چطور اطلاعات خودم رو حذف کنم؟',
-    a6: 'همه‌چیز خودکاره: ۱) توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن. ۲) برای اسکریپت: توی کنسولش بنویس delete یا یک‌بار node index.js --delete رو اجرا کن — فایل شخصی و سشن همان لحظه پاک می‌شن؛ اگه حذف خودکار ممکن نشد، فقط index.js رو از تب Files پنل پاک کن.',
+    a6: 'توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن؛ همه‌ی داده‌ها و کلید رمزنگاری همان لحظه، خودکار و بدون هیچ سؤالی برای همیشه پاک می‌شن. و چون هیچ فایلی روی کاتابامپ نیست، اون‌جا هم چیزی برای پاک کردن وجود نداره.',
     q7: 'اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟',
     a7: 'هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت (localStorage) ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.',
-    q8: 'اسکریپت ساخته‌شده رو چطور روی سرور بذارم؟',
-    a8: 'نه ترمینال، نه دستور: پنل کاتابامپ ← تب Files ← فایل index.js رو Upload کن ← Restart بزن. تمام! از این به بعد هر ۲۴ ساعت خودش تمدید می‌کنه. برای تغییر اطلاعات هم همین‌جا توی سایت به‌روزرسانی کن و فایل جدید رو جایگزین قبلی کن.',
+    q8: 'این کار باعث بن شدن می‌شه؟',
+    a8: 'نه فایلی روی کاتابامپ آپلود می‌شه، نه کدی روی هاست اجرا می‌شه — دکمه‌ی تمدید فقط همون دکمه‌های Renew رو توی مرورگر خودت کلیک می‌کنه؛ همون‌کاری که خودت هم دستی می‌کنی. با این حال مثل هر ابزاری، ازش فقط برای اکانت خودت استفاده کن؛ مسئولیت استفاده با خودته.',
     foot_made: 'ساخته‌شده توسط', foot_on: 'در گیتهاب',
     foot_lic: 'لایسنس MIT © 2026 — این پروژه به‌طور کامل متعلق به 6amirreza6 است؛ تمام حقوق محفوظ است.',
   },
   en: {
-    hero_flow: 'Build and download your personal script from the <b>Account panel</b> — without typing a single terminal command.',
+    hero_flow: 'Grab the browser renew button from the <b>Account panel</b> and renew all your servers <b>with one click</b> — without a single file on KataBump.',
     nav_account: 'My account', nav_sec: 'Security', nav_faq: 'FAQ',
     pill: 'Free & open source · keep your free KataBump server alive',
-    hero_sub: 'Auto-renew your free KataBump server <b>every 24 hours</b> — just enter your email, password and <b>Server ID</b>; the encrypted vault handles the rest.',
+    hero_sub: 'Renew your free KataBump server <b>with one click</b> — enter your info, manage your servers and hit the browser renew button. <b>Zero files are ever uploaded to KataBump</b>.',
     cta_gh: 'View on GitHub', cta_acc: 'Account panel',
     b1: 'auto cycle', b2: 'encrypted vault', b3: 'dependencies', b4: '© 6amirreza6 — all rights reserved',
-    panel_h: 'Flight panel', panel_hint: 'This is your personal build running on your host — zero typing needed.',
-    st1: 'Next renewal in', st2: 'Vault: locked & safe', st3: 'Server: alive & renewed',
+    b5: 'files on KataBump',
+    panel_h: 'One-click renewal', panel_hint: 'The browser renew button automatically presses every Renew button on the KataBump dashboard — exactly like you would, just faster and never forgetful.',
+    st1: 'Next renewal in', st2: 'Zero files on KataBump', st3: 'Auto-synced with the panel',
     acc_h: 'My account panel',
-    acc_lead: 'Everything happens right here on this page: enter your account info, set up your account, add or remove servers anytime — then grab your personal script. Nothing ever leaves your browser.',
+    acc_lead: 'Everything happens right here on this page: enter your account info, add or remove servers, and renew them all with one click using the browser renew button — without a single file on KataBump.',
     acc1_h: 'Enter account info',
     acc1_exp: 'Type your KataBump email, account password and Server ID, then hit “Save to vault” — your info is sealed with AES-256-GCM on the spot and locked inside your own browser. No server involved.',
     lbl_email: 'KataBump email',
@@ -561,16 +593,25 @@ const I18N = {
     hint_sid: 'The number at the end of your server URL in the panel, like /server/84521 — enter one at a time and press +. Add, remove or change servers right here; leaving it empty is fine too.',
     btn_save: 'Save to vault',
     chips_none: 'no servers added yet',
+    remind_txt: '⏰ Renewal time! Press the “Renew my servers” button on the KataBump dashboard.',
+    bm_h: 'Browser renew button',
+    bm_exp: 'Drag this button into your browser’s bookmarks bar. From now on, whenever you are on the KataBump dashboard, click it: every Renew button on the page is pressed automatically and the result is synced back to this panel. Nothing is ever uploaded or executed on KataBump — literally zero files.',
+    bm_drag: 'Renew my servers',
+    bm_copy: 'Copy button code',
+    bm_copied: 'Button code copied — save it as a new bookmark in your browser ✓',
+    bm_copyfail: 'Copy failed — your browser blocked it; please try again',
+    bm_last: 'Last recorded renewal',
+    bm_auto_h: 'Fully automatic mode (zero clicks) — advanced',
+    bm_auto_exp: 'Install the free Tampermonkey extension, then press the button below and save the script as a new userscript in Tampermonkey. From then on, whenever the KataBump dashboard is open, the renewal happens by itself — without a single click. This too runs only inside your own browser and never puts any file on KataBump.',
+    bm_copy2: 'Copy auto userscript (Tampermonkey)',
+    bm_safe: 'Safe & ban-friendly: nothing is ever placed inside KataBump — no uploads, no execution; just the same ordinary Renew clicks, in your own browser.',
+    renew_ok: 'Renewal recorded — the 4-day timer restarted ✓',
     remove: 'remove',
     added_srv: 'Server added ✓',
     removed_srv: 'Server removed',
     dup_srv: 'This server is already in the list',
     ph_pw_keep: 'type a new password to change it',
     updated_toast: 'Your account info was updated ✓',
-    btn_build: 'Build & download script (index.js)',
-    build_hint: 'This button builds a personalized index.js: your info is sealed inside with AES-256-GCM — just upload it in the Files tab of the KataBump panel and hit Restart. No terminal, no typing. This file is yours only — never share it.',
-    build_toast: 'index.js built and downloaded — now upload it in the KataBump panel Files tab and hit Restart ✓',
-    build_err: 'Script build failed — please try again',
     acc2_h: 'Account info',
     acc2_exp: 'Your saved account info; the password is masked and only revealed temporarily with the eye button.',
     kv_email: 'Email', kv_pw: 'Password', kv_sid: 'Server ID', kv_enc: 'Status', kv_at: 'Saved at',
@@ -585,36 +626,36 @@ const I18N = {
     err_pw: 'Enter your account password',
     err_sid: 'Server ID must be numbers only; separate multiple servers with commas',
     feat_h: 'Why it rocks',
-    f1_h: '24h cycle', f1_p: 'One renewal run every day; if an attempt fails it retries after 15 minutes until it succeeds.',
-    f2_h: 'Encrypted vault', f2_p: 'Your email and password never sit on disk in plain text — sealed with AES-256-GCM and the key is split in two.',
-    f3_h: 'Zero dependencies', f3_p: 'A single .mjs file. No npm install, no packages — breathes easily in the free host\'s 308 MB RAM.',
-    f4_h: 'Captcha handling', f4_p: 'If the panel throws a Turnstile captcha, the --login browser mode solves it automatically.',
-    f5_h: 'Gentle behavior', f5_p: 'Only your own account, with sane delays between requests — no spam, no pressure on the panel.',
+    f1_h: '4-day reminder', f1_p: 'The site tracks each server’s renewal time and warns you before the 4-day deadline so you press the renew button in time.',
+    f2_h: 'Encrypted vault', f2_p: 'Your email and password are never stored in plain text — sealed with AES-256-GCM and the key stays only inside your own browser.',
+    f3_h: 'Zero files on KataBump', f3_p: 'No script is uploaded or executed on the host; everything lives in your own browser — nothing left behind that could get you banned.',
+    f4_h: 'Automatic sync', f4_p: 'After every renewal the result syncs back to your account panel automatically and the 4-day countdown restarts.',
+    f5_h: 'Gentle behavior', f5_p: 'Only your own account’s Renew buttons get clicked, with sane delays — no spam, no pressure on the panel.',
     f6_h: 'Multiple servers', f6_p: 'Own several free servers? Enter their IDs separated by commas and all of them get renewed.',
     sec_h: 'Your info, in its own encrypted vault',
-    sec_p: 'When you finish setup, a random 256-bit key is created and your info is sealed with AES-256-GCM. The key is split into two halves stored in two separate hidden places — so finding a single file reveals nothing.',
-    sec_l1: 'No plain text on disk: no email, no password, no IDs',
+    sec_p: 'When you save your info, a random 256-bit key is created and everything is sealed with AES-256-GCM; the key never leaves your browser and is never sent to any server — so nobody but you can ever touch it.',
+    sec_l1: 'No plain text stored: no email, no password, no IDs',
     sec_l2: 'Authenticated encryption (GCM) — tampering is detectable',
-    sec_l3: 'Your info only goes to dashboard.katabump.com itself',
-    sec_l4: 'One --delete (or typing delete in the console) wipes everything instantly, without a trace',
+    sec_l3: 'No data ever leaves your browser — not to KataBump, not anywhere else',
+    sec_l4: 'The “Delete my info” button destroys both the data and the encryption key instantly, without a trace',
     faq_h: 'FAQ',
     faq_lead: 'The things people ask the most.',
     q1: 'Where do I find my Server ID?',
-    a1: 'Log into katabump.com and click your server — in the browser address bar you will see something like dashboard.katabump.com/server/84521. That 84521 is your Server ID. You can also leave it empty and let the script find it.',
+    a1: 'Log into katabump.com and click your server — in the browser address bar you will see something like dashboard.katabump.com/server/84521. That 84521 is your Server ID. Leaving it empty is fine too — the renew button covers every server on your account anyway.',
     q2: 'Does my password stay safe?',
     a2: 'Your password is sealed with AES-256-GCM and the key is split across two separate paths; it is never written in plain text and never sent anywhere except KataBump. Note the tool is open source — anyone with full shell access to the server could, like with any automation tool, follow the same paths.',
-    q3: 'What if a captcha shows up?',
-    a3: 'Run the generated index.js once on your PC with node index.js --login (playwright is only needed there). A headless browser solves the Turnstile captcha and saves the session; the host then reuses it. Even without that, the script retries automatically every 15 minutes.',
-    q4: 'Does it work on my own PC?',
-    a4: 'Yes! Download index.js from the Account panel and run node index.js on your computer — it renews itself every 24 hours. Use --login the same way to build a captcha session.',
+    q3: 'How does the automatic renewal work?',
+    a3: 'From the Account panel, drag the “⚡ Renew my servers” button into your browser’s bookmarks bar. Then, whenever you are on the KataBump dashboard, click it: every Renew button on the page is pressed automatically and the result syncs back to this site. No file is uploaded anywhere.',
+    q4: 'Can it be fully click-free?',
+    a4: 'Yes — the advanced mode: install the free Tampermonkey extension and copy the auto userscript from the Account panel. From then on, whenever the KataBump dashboard is open, the renewal happens by itself — without a single click. This too runs only inside your own browser.',
     q5: 'What about KataBump rules?',
     a5: 'This tool is for your own server and your own account only, and it is deliberately gentle (at least 23 hours between successful renewals). Still, automation may conflict with any service\'s terms — use it at your own risk.',
     q6: 'How do I delete my information?',
-    a6: 'Everything is automatic: 1) on this site, the “Delete account from the site” card — press “Delete my info”. 2) For the script: type delete in its console or run node index.js --delete once — the personal file and session are wiped instantly; if self-delete is not possible, just remove index.js in the panel Files tab.',
+    a6: 'On this site, the “Delete account from the site” card — press “Delete my info”; all data and the encryption key are wiped instantly, automatically and forever. And since no file ever existed on KataBump, there is nothing to clean up there either.',
     q7: 'Where does the info I save on the site go?',
     a7: 'Nowhere! It stays inside your own browser (localStorage), is sealed with AES-256-GCM and is never sent to any server. The “Delete my info” button destroys both the data and the encryption key forever.',
-    q8: 'How do I put the generated script on my server?',
-    a8: 'No terminal, no commands: KataBump panel → Files tab → Upload index.js → hit Restart. Done! From then on it renews itself every 24 hours. To change your info, update it here on the site and replace the file with a fresh build.',
+    q8: 'Can this get me banned?',
+    a8: 'No file is uploaded to KataBump and no code runs on the host — the renew button only clicks the same Renew buttons in your own browser, exactly what you would do by hand. Still, as with any tool, use it only for your own account; use it at your own risk.',
     foot_made: 'Made by', foot_on: 'on GitHub',
     foot_lic: 'MIT License © 2026 — this project fully belongs to 6amirreza6. All rights reserved.',
   },
@@ -649,6 +690,17 @@ applyLang();
   let revealPw = false;
   let staged = [];      // server ids being managed in the form
   let hasVault = false; // whether an account is saved
+  const CYCLE_MS = 4 * 864e5; // KataBump free cycle: renew every 4 days
+  let lastRenewTs = null;
+  function fmtLeft(ms) {
+    if (ms <= 0) return '\u26a0';
+    const d = ms / 864e5;
+    if (d >= 2) return d.toFixed(1) + 'd';
+    if (d >= 1) return Math.floor(d) + 'd';
+    const h = ms / 36e5;
+    if (h >= 1) return Math.floor(h) + 'h';
+    return Math.max(1, Math.floor(ms / 6e4)) + 'm';
+  }
 
   async function getKey() {
     const raw = localStorage.getItem(VKEY);
@@ -681,9 +733,13 @@ applyLang();
   /* ---- server chips (add / remove / change) ---- */
   function renderChips() {
     const box = $('srvChips'), d = I18N[LANG];
+    const due = !!(lastRenewTs && (lastRenewTs + CYCLE_MS - Date.now()) < 864e5);
+    const rem = document.getElementById('remind');
+    if (rem) rem.classList.toggle('show', due);
     if (!staged.length) { box.innerHTML = '<span class="none">' + d.chips_none + '</span>'; return; }
+    const left = lastRenewTs ? fmtLeft(lastRenewTs + CYCLE_MS - Date.now()) : null;
     box.innerHTML = staged.map((s, i) =>
-      '<span class="chip">' + esc(s) + '<button class="x" data-i="' + i + '" type="button" title="' + d.remove + '\">\u2715</button></span>').join('');
+      '<span class="chip' + (due ? ' due' : '') + '">' + esc(s) + (left ? '<span class="left">' + left + '</span>' : '') + '<button class="x" data-i="' + i + '" type="button" title="' + d.remove + '\">\u2715</button></span>').join('');
     box.querySelectorAll('.x').forEach(b => b.addEventListener('click', () => {
       staged.splice(Number(b.dataset.i), 1);
       renderChips();
@@ -694,7 +750,7 @@ applyLang();
     const acc = await readVault();
     if (!acc) return;
     localStorage.removeItem(VDATA);
-    localStorage.setItem(VDATA, JSON.stringify(await seal({email: acc.email, pw: acc.pw, sids: staged.slice(), at: acc.at})));
+    localStorage.setItem(VDATA, JSON.stringify(await seal({email: acc.email, pw: acc.pw, sids: staged.slice(), at: acc.at, lastRenew: acc.lastRenew || null})));
     toast(I18N[LANG].removed_srv);
     renderInfo();
   }
@@ -715,8 +771,8 @@ applyLang();
     const box = $('accInfo'), d = I18N[LANG];
     const acc = await readVault();
     hasVault = !!acc;
-    $('btnBuild').disabled = !acc;
-    if (!acc) { box.innerHTML = '<div class="empty">' + d.acc_empty + '</div>'; return; }
+    lastRenewTs = (acc && acc.lastRenew) || null;
+    if (!acc) { box.innerHTML = '<div class="empty">' + d.acc_empty + '</div>'; renderLastRenew(null); renderChips(); return; }
     if (!staged.length) staged = (acc.sids || []).slice();
     const masked = '\u2022'.repeat(Math.max(6, Math.min(acc.pw.length, 14)));
     const pwHtml = (revealPw ? esc(acc.pw) : masked) +
@@ -732,18 +788,25 @@ applyLang();
       row(d.kv_enc, '<span class="ok">\u2713 AES-256-GCM</span>') +
       row(d.kv_at, esc(dt));
     $('eyeInfo').addEventListener('click', () => { revealPw = !revealPw; renderInfo(); });
+    renderLastRenew(acc);
     box.querySelectorAll('.x').forEach(b => b.addEventListener('click', async () => {
       const sid = b.dataset.sid;
       const cur = await readVault();
       if (!cur) return;
       const rest = (cur.sids || []).filter(x => x !== sid);
       localStorage.removeItem(VDATA);
-      localStorage.setItem(VDATA, JSON.stringify(await seal({email: cur.email, pw: cur.pw, sids: rest, at: cur.at})));
+      localStorage.setItem(VDATA, JSON.stringify(await seal({email: cur.email, pw: cur.pw, sids: rest, at: cur.at, lastRenew: cur.lastRenew || null})));
       staged = rest.slice();
       renderChips();
       toast(d.removed_srv);
       renderInfo();
     }));
+    renderChips();
+  }
+  function renderLastRenew(acc) {
+    const el = $('lastRenew');
+    if (!el) return;
+    el.textContent = (acc && acc.lastRenew) ? new Date(acc.lastRenew).toLocaleString(LANG === 'fa' ? 'fa-IR' : 'en-US') : '\u2014';
   }
   window.__renderAcc = renderInfo;
   window.__renderChips = renderChips;
@@ -777,7 +840,7 @@ applyLang();
     if (!pw && prev) pw = prev.pw; // keep the stored password when updating
     if (!pw) { toast(d.err_pw, 1); return; }
     localStorage.removeItem(VDATA);
-    localStorage.setItem(VDATA, JSON.stringify(await seal({email: email, pw: pw, sids: staged.slice(), at: prev ? prev.at : Date.now()})));
+    localStorage.setItem(VDATA, JSON.stringify(await seal({email: email, pw: pw, sids: staged.slice(), at: prev ? prev.at : Date.now(), lastRenew: prev ? (prev.lastRenew || null) : null})));
     $('inPw').value = ''; $('inPw').type = 'password';
     revealPw = false;
     toast(prev ? d.updated_toast : d.saved_toast);
@@ -790,6 +853,9 @@ applyLang();
     localStorage.removeItem(VKEY);
     revealPw = false;
     staged = [];
+    lastRenewTs = null;
+    const lr = $('lastRenew'); if (lr) lr.textContent = '\u2014';
+    const rem = document.getElementById('remind'); if (rem) rem.classList.remove('show');
     $('inEmail').value = '';
     $('inPw').placeholder = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
     renderChips();
@@ -797,45 +863,122 @@ applyLang();
     renderInfo();
   });
 
-  /* ---- personal script builder (index.js) — same AES-256-GCM format the engine reads ---- */
-  const AAD_ENC = tenc.encode('KataBumpUT.gen.v1');
-  async function buildSealed(acc) {
-    const key = crypto.getRandomValues(new Uint8Array(32));
-    const iv = crypto.getRandomValues(new Uint8Array(12));
-    const kA = key.slice(0, 16), kB = key.slice(16);
-    const mask = new Uint8Array(await crypto.subtle.digest('SHA-256', tenc.encode('KataBumpUT.site.v1'))).slice(0, 16);
-    const kBm = kB.map((b, i) => b ^ mask[i]);
-    const k = await crypto.subtle.importKey('raw', key, 'AES-GCM', false, ['encrypt']);
-    const raw = new Uint8Array(await crypto.subtle.encrypt({name: 'AES-GCM', iv, additionalData: AAD_ENC}, k, tenc.encode(JSON.stringify({email: acc.email, password: acc.pw, sids: acc.sids || []}))));
-    const ct = raw.slice(0, raw.length - 16), tag = raw.slice(raw.length - 16);
-    return {v: 1, alg: 'aes-256-gcm', aad: 'KataBumpUT.gen.v1', iv: b64e(iv), tag: b64e(tag), ct: b64e(ct), kA: b64e(kA), kB: b64e(kBm)};
-  }
-
-  $('btnBuild').addEventListener('click', async () => {
-    const d = I18N[LANG];
-    const acc = await readVault();
-    if (!acc) { toast(d.err_pw, 1); return; }
-    $('btnBuild').disabled = true;
-    try {
-      const tpl = await (await fetch('./engine/kata-engine.js')).text();
-      const js = tpl
-        .replace('__VAULT__', JSON.stringify(await buildSealed(acc)))
-        .replace('__GENERATED_AT__', new Date().toISOString());
-      if (js.includes('__VAULT__') || js.includes('__GENERATED_AT__')) throw new Error('template');
-      const blob = new Blob([js], {type: 'text/javascript'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'index.js';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      toast(d.build_toast);
-    } catch (e) {
-      toast(d.build_err, 1);
+  /* ---- browser renew button (bookmarklet) + optional full-auto userscript — ZERO files inside KataBump ---- */
+  const SITE_URL = 'https://6amirreza6.github.io/KatabumpUT/index.html';
+  const BM_BODY = `try {
+  var SITE = '${SITE_URL}';
+  var q = function (s) { return [].slice.call(document.querySelectorAll(s)); };
+  var txt = function (e) { return ((e.textContent || '') + ' ' + (e.value || '') + ' ' + (e.title || '') + ' ' + (e.getAttribute('aria-label') || '')).toLowerCase(); };
+  var vis = function (e) { return !!(e.offsetParent || e.getClientRects().length); };
+  var pass = q('input[type=password]').filter(vis).length;
+  var btns = q('button,a,input[type=submit],[role=button]').filter(function (e) { return vis(e) && !e.disabled && /renew|extend|تمدید/.test(txt(e)); });
+  if (pass && !btns.length) { alert('KatabumpUT: Login first, then run this again.'); return; }
+  if (!btns.length) { alert('KatabumpUT: No renew button found. Open your servers page in the panel first.'); return; }
+  window.confirm = function () { return true; };
+  var n = 0, f = null;
+  try { f = document.createElement('iframe'); f.style.cssText = 'width:0;height:0;border:0;position:fixed;left:-99px;bottom:0'; f.src = SITE + '#renewed-pending'; document.documentElement.appendChild(f); } catch (e) {}
+  var confirmPass = function () {
+    q('.swal2-confirm,.swal-button--confirm,.modal.show .btn-primary,[role=dialog] button[type=submit],dialog[open] button[type=submit],.jconfirm .jconfirm-buttons button').forEach(function (e) { try { if (vis(e)) { e.click(); } } catch (err) {} });
+  };
+  (function loop(i) {
+    if (i >= btns.length) {
+      var ts = Date.now();
+      try { if (f) { f.src = SITE + '#renewed=' + ts; } } catch (e) {}
+      setTimeout(function () { try { if (f) f.remove(); } catch (e) {} }, 4000);
+      alert('KatabumpUT \\u2605 Made by 6amirreza6 on GitHub\\n' + n + ' renew click(s) sent — renewal recorded on your site panel.');
+      return;
     }
-    $('btnBuild').disabled = !hasVault;
+    try { btns[i].click(); n++; } catch (e) {}
+    setTimeout(function () { confirmPass(); loop(i + 1); }, 900);
+  })(0);
+} catch (e) { alert('KatabumpUT error: ' + e.message); }`;
+  const US_CODE = `// ==UserScript==
+// @name         KataBumpUT Auto-Renew by 6amirreza6
+// @namespace    https://github.com/6amirreza6
+// @version      3.1.0
+// @description  Auto-renews your free KataBump servers by pressing the Renew buttons on every dashboard visit. Nothing is uploaded to KataBump - it runs only in your own browser. (c) 6amirreza6 - MIT
+// @author       6amirreza6
+// @match        https://dashboard.katabump.com/*
+// @run-at       document-idle
+// @grant        none
+// ==/UserScript==
+(function () {
+  try {
+    var SITE = '${SITE_URL}';
+    var q = function (s) { return [].slice.call(document.querySelectorAll(s)); };
+    var txt = function (e) { return ((e.textContent || '') + ' ' + (e.value || '') + ' ' + (e.title || '') + ' ' + (e.getAttribute('aria-label') || '')).toLowerCase(); };
+    var vis = function (e) { return !!(e.offsetParent || e.getClientRects().length); };
+    var run = function () {
+      try {
+        var pass = q('input[type=password]').filter(vis).length;
+        var btns = q('button,a,input[type=submit],[role=button]').filter(function (e) { return vis(e) && !e.disabled && /renew|extend|تمدید/.test(txt(e)); });
+        if (!btns.length || pass) return;
+        window.confirm = function () { return true; };
+        var n = 0, f = null;
+        try { f = document.createElement('iframe'); f.style.cssText = 'width:0;height:0;border:0;position:fixed;left:-99px;bottom:0'; f.src = SITE + '#renewed-pending'; document.documentElement.appendChild(f); } catch (e) {}
+        var confirmPass = function () {
+          q('.swal2-confirm,.swal-button--confirm,.modal.show .btn-primary,[role=dialog] button[type=submit],dialog[open] button[type=submit],.jconfirm .jconfirm-buttons button').forEach(function (e) { try { if (vis(e)) { e.click(); } } catch (err) {} });
+        };
+        (function loop(i) {
+          if (i >= btns.length) {
+            var ts = Date.now();
+            try { if (f) { f.src = SITE + '#renewed=' + ts; } } catch (e) {}
+            setTimeout(function () { try { if (f) f.remove(); } catch (e) {} }, 4000);
+            console.log('%c\\u2605 KataBumpUT - ' + n + ' renew click(s) sent. Made by 6amirreza6 on GitHub', 'color:#a78bfa;font-weight:bold');
+            return;
+          }
+          try { btns[i].click(); n++; } catch (e) {}
+          setTimeout(function () { confirmPass(); loop(i + 1); }, 900);
+        })(0);
+      } catch (e) {}
+    };
+    setTimeout(run, 2500);
+    setInterval(run, 30 * 60 * 1000);
+  } catch (e) {}
+})();`;
+
+  const bmHref = 'javascript:' + encodeURIComponent('(function(){' + BM_BODY + '})()');
+  $('bmLink').setAttribute('href', bmHref);
+
+  async function copyText(txt) {
+    try { await navigator.clipboard.writeText(txt); return true; }
+    catch (e) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove(); return ok;
+      } catch (e2) { return false; }
+    }
+  }
+  $('btnCopyBm').addEventListener('click', async () => {
+    (await copyText(bmHref)) ? toast(I18N[LANG].bm_copied) : toast(I18N[LANG].bm_copyfail, 1);
   });
+  $('btnCopyUs').addEventListener('click', async () => {
+    (await copyText(US_CODE)) ? toast(I18N[LANG].bm_copied) : toast(I18N[LANG].bm_copyfail, 1);
+  });
+
+  /* ---- renewal sync: the bookmarklet/userscript loads this site with #renewed=<ts> in a hidden iframe ---- */
+  (function handleRenewSync() {
+    const m = (location.hash || '').match(/^#renewed=(\d+)/);
+    if (!m) return;
+    const ts = Number(m[1]);
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    (async () => {
+      const acc = await readVault();
+      if (acc) {
+        localStorage.removeItem(VDATA);
+        localStorage.setItem(VDATA, JSON.stringify(await seal({email: acc.email, pw: acc.pw, sids: acc.sids || [], at: acc.at, lastRenew: ts})));
+        lastRenewTs = ts;
+        staged = (acc.sids || []).slice();
+        renderChips();
+        renderInfo();
+        toast(I18N[LANG].renew_ok);
+      }
+      setTimeout(() => { try { window.close(); } catch (e) {} }, 2500);
+    })();
+  })();
 
   await prefill();
   renderInfo();
