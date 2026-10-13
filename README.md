@@ -6,9 +6,10 @@
 ![Node](https://img.shields.io/badge/node-18%2B-blue)
 ![Author](https://img.shields.io/badge/author-6amirreza6-purple)
 ![Vault](https://img.shields.io/badge/vault-AES--256--GCM-8b5cf6)
+![Terminal](https://img.shields.io/badge/terminal-not%20needed-22d3ee)
 
-**تمدید خودکار سرور رایگان KataBump — هر ۲۴ ساعت، با گاوصخچه‌ی رمزنگاری‌شده**
-**Auto-renew your free KataBump server every 24h — with an encrypted vault**
+**تمدید خودکار سرور رایگان KataBump — همه‌چیز از داخل سایت، بدون ترمینال**
+**Auto-renew your free KataBump server — everything from the site, no terminal**
 
 [🌐 وب‌سایت / Website](https://6amirreza6.github.io/KatabumpUT/) · [GitHub](https://github.com/6amirreza6/KatabumpUT)
 
@@ -20,80 +21,62 @@
 
 ### این چیست؟
 
-سرورهای **رایگان** [KataBump](https://katabump.com) هر **۴ روز** باید از پنل تمدید (Renew) بشن، وگرنه خاموش می‌شن. این ابزار یه اسکریپت تعاملیه که **داخل ترمینال همون هاست کاتابامپ خودت** اجرا می‌شه، یه‌بار ازت **ایمیل، رمز عبور و شناسه‌ی سرور (Server ID)** می‌پرسه، همه‌چیز رو توی یه **گاوصخچه‌ی رمزنگاری‌شده** قفل می‌کنه و از اون به بعد **هر ۲۴ ساعت** خودش تمدید رو انجام می‌ده — یعنی همون سروری که توش هستی، خودش رو زنده نگه می‌داره.
+سرورهای **رایگان** [KataBump](https://katabump.com) باید هر چند روز از پنل تمدید (Renew) بشن، وگرنه خاموش می‌شن. **KataBumpUT** یک **پنل حساب داخل سایت** است: ایمیل، رمز و شناسه‌ی سرورهات رو همون‌جا وارد می‌کنی، اکانتت رو می‌سازی، سرورها رو اضافه/حذف/تغییر می‌کنی و آخرش یک دکمه یک فایل **`index.js` شخصی‌سازی‌شده** بهت می‌ده که همه‌چیز داخلش قفل شده. اون فایل رو در پنل کاتابامپ آپلود می‌کنی و Restart می‌زنی — تمام! از اون به بعد **هر ۲۴ ساعت خودش تمدید می‌کنه**.
 
-- بدون هیچ وابستگی — فقط Node.js نسخه ۱۸ به بالا
-- **گاوصخچه‌ی AES-256-GCM:** ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده روی دیسک ذخیره نمی‌شن؛ کلید رمزنگاری هم به دو نیمه تقسیم و در دو جای جدا و مخفی نگه‌داری می‌شه
-- **ورود Server ID:** اسکریپت مستقیم می‌ره سراغ سرور خودت (مثلاً `dashboard.katabump.com/server/84521`) و چند سرور رو هم با کاما پشتیبانی می‌کنه
-- **چرخه‌ی ۲۴ ساعته:** هر شب یه دور تمدید؛ اگه تلاشی شکست بخوره ۱۵ دقیقه بعد دوباره امتحان می‌کنه
-- حالت مرورگر برای کپچای Cloudflare Turnstile
+**چرا بدون ترمینال؟** چون توی ترمینال هاست کاتابامپ نمی‌شه اسکریپت تعاملی زد — نه دستور می‌شه تایپ کرد، نه از ویزارد ورودی گرفت. پس دیگه هیچ‌چیز از ترمینال نمی‌خواد: اطلاعات از **سایت** میاد، توی فایل ساخته‌شده **قفل** می‌شه و اسکریپت کاملاً **بی‌سؤال** اجرا می‌شه.
+
+- 🖥️ **همه‌چیز از داخل سایت:** ورود اطلاعات، ساخت اکانت، مدیریت سرورها (افزودن/حذف/تغییر)، دانلود اسکریپت و حذف اطلاعات
+- 🔐 **گاوصخچه‌ی رمزنگاری‌شده:** اطلاعات توی مرورگر خودت با **AES-256-GCM** قفل می‌شه و هیچ‌جا ارسال نمی‌شه؛ داخل فایل ساخته‌شده هم به‌صورت رمزنگاری‌شده جاسازی می‌شه (بدون هیچ متن ساده‌ای)
+- ⏰ **چرخه‌ی ۲۴ ساعته:** هر شب یک تمدید؛ تلاش ناموفق ۱۵ دقیقه بعد دوباره امتحان می‌شه
+- 🚫 **نه ترمینال، نه تایپ، نه وابستگی:** فایل ساخته‌شده فقط به Node.js 18+ نیاز داره
+- 🧩 **چند سرور:** هر چند سرور که داری، از داخل سایت مدیریت‌شون کن
+- 🧯 **حذف خودکار:** هم داخل سایت (یک کلیک) و هم داخل اسکریپت (`delete` یا `--delete` با حذف خود فایل)
 
 <div align="center">
 <img src="assets/demo.png" alt="نمونه اجرا" width="720">
 </div>
 
-### اجرای سریع (توی ترمینال کاتابامپ)
+### سه قدم (بدون حتی یک دستور)
 
-**روش ۱ — دانلود مستقیم:**
-```bash
-curl -O https://raw.githubusercontent.com/6amirreza6/KatabumpUT/main/kata-ut.mjs
-node kata-ut.mjs
-```
+1. **[سایت](https://6amirreza6.github.io/KatabumpUT/) را باز کن** → بخش «پنل حساب من» → ایمیل، رمز و سرورهات را وارد و ذخیره کن
+2. **«ساخت و دانلود اسکریپت»** را بزن → فایل `index.js` شخصی خودت بگیر
+3. در پنل کاتابامپ: تب **Files** → `index.js` را **Upload** کن → **Restart** بزن
 
-**روش ۲ — کلون ریپو:**
-```bash
-git clone https://github.com/6amirreza6/KatabumpUT.git
-cd KatabumpUT
-node kata-ut.mjs
-```
+تمام! لاگ پنل از این به بعد هر ۲۴ ساعت یک تمدید موفق نشان می‌دهد.
 
-اولین بار یه ویزارد کوچیک میاد: ایمیل → رمز (حروفش مخفیه) → شناسه‌ی سرور (عدد آخر آدرس پنلت؛ اگه خالی بذاری خودش پیداش می‌کنه). بعدش دیگه هیچ سؤالی ازت پرسیده نمی‌شه!
-
-### حالت‌های اجرا
+### قابلیت‌های فایل `index.js` ساخته‌شده
 
 | دستور | کار |
 |---|---|
-| `node kata-ut.mjs` | همین حالا تمدید می‌کنه و بعدش خودش می‌مونه و هر ۲۴ ساعت دوباره تمدید می‌کنه — کاملاً خودکار |
-| `node kata-ut.mjs --loop` | بدون سؤال، دائمی می‌مونه و هر ۲۴ ساعت تمدید می‌کنه (پیشنهادی) |
-| `node kata-ut.mjs --once` | فقط یک بار تمدید می‌کنه و خارج می‌شه |
-| `node kata-ut.mjs --setup` | اطلاعات رو دوباره وارد می‌کنی (گاوصخچه‌ی نو) |
-| `node kata-ut.mjs --status` | وضعیت گاوصخچه و آخرین تمدید رو نشون می‌ده |
-| `node kata-ut.mjs --delete` | 🔥 **حذف اطلاعات من:** همه‌چیز رو همان لحظه و خودکار پاک می‌کنه (مخفف قدیمی `--reset` هم کار می‌کنه) |
-| `node kata-ut.mjs --login` | حالت مرورگر — وقتی کپچای Turnstile سر راه باشه (نیازمند `npm i playwright && npx playwright install chromium`) |
+| `node index.js` | همین حالا تمدید می‌کند و بعدش هر ۲۴ ساعت خودکار تمدید می‌کند (پیش‌فرض) |
+| `node index.js --once` | فقط یک تمدید و خروج |
+| `node index.js --status` | وضعیت آخرین تمدید و بازه |
+| `node index.js --delete` | 🔥 **حذف اطلاعات من:** فایل شخصی و سشن همان لحظه پاک می‌شوند (خود-حذفی) |
+| `node index.js --login` | حالت مرورگر برای کپچای Turnstile — فقط روی کامپیوتر خودت با playwright |
 
-همچنین می‌تونی به‌جای ویزارد از متغیرهای محیطی استفاده کنی:
-```bash
-KATA_EMAIL=you@example.com KATA_PASSWORD=secret KATA_SERVER_ID=84521 node kata-ut.mjs --loop
-```
+وقتی اسکریپت در حال اجراست، کنسول زنده هم در دسترس است: `renew` · `status` · `delete` · `exit`.
 
-### چطور کار می‌کند؟
+### امنیت اطلاعات
 
-1. با کوکی‌های ذخیره‌شده (یا لاگین تازه) به `dashboard.katabump.com` وصل می‌شود
-2. مستقیم می‌رود سراغ صفحه‌ی سرور خودت و دکمه/فرم **Renew** را پیدا می‌کند
-3. فرم را همراه با همهٔ فیلدهای مخفی (توکن و…) ارسال می‌کند
-4. اگر پنل کپچا بخواهد، راهنمایی می‌کند که حالت `--login` (مرورگر) را اجرا کنی
-5. بین دو تمدیدِ موفق حداقل ۲۳ ساعت فاصله می‌گذارد تا رفتارش ملایم و شبیه انسان باشد
+- **داخل سایت:** اطلاعات فقط در مرورگر خودت (localStorage) با AES-256-GCM ذخیره می‌شود؛ به هیچ سروری ارسال نمی‌شود. با دکمه‌ی «حذف اطلاعات من» داده و کلید با هم نابود می‌شوند.
+- **داخل `index.js`:** اطلاعات با AES-256-GCM رمز و کلید به دو نیمه‌ی جدا و ماسک‌شده تقسیم می‌شود — جست‌وجوی ساده‌ی فایل هیچی را لو نمی‌دهد. یادت باشد این فایل **شخصی** است؛ مثل رمزت با آن رفتار کن.
+- سشن کوکی‌ها هم در فایل جداگانه‌ی `.kbu-session.json` (بدون هیچ رمزی) کنار اسکریپت نگه‌داری می‌شود.
 
-### اطلاعات من کجا ذخیره می‌شود؟
+### کپچا (Cloudflare Turnstile)
 
-توی **گاوصخچه**. موقع setup یک کلید ۲۵۶ بیتی تصادفی ساخته می‌شود و اطلاعات با **AES-256-GCM** رمز می‌شود؛ بعد کلید به دو نیمه تقسیم و نیمه‌ها در دو مسیر جدا نگه‌داری می‌شوند. نتیجه: کسی که فقط یک فایل را پیدا کند هیچی نمی‌فهمد — نه ایمیل، نه رمز، نه شناسه‌ی سرور به‌صورت متن ساده وجود دارد. و با `--delete` (یا تایپ `delete` در کنسول زنده) همه‌چیز بدون ردپا پاک می‌شود.
+اگر لاگین HTTP با کپچا روبه‌رو شد، اسکریپت ناامید نمی‌شود: هر ۱۵ دقیقه خودش دوباره تلاش می‌کند. برای حل قطعی، یک بار روی کامپیوتر خودت `node index.js --login` را اجرا کن (playwright کپچا را خودکار حل می‌کند و سشن ذخیره می‌شود) — بعد فایل `.kbu-session.json` را کنار `index.js` روی هاست بگذار.
 
 ### 🔥 حذف اطلاعات من (کاملاً خودکار)
 
-هر وقت خواستی همه‌چیز پاک بشه، دو راه داری — و هیچ‌کدوم سؤال اضافه نمی‌پرسند:
-
-- **تایپ در کنسول زنده:** وقتی اسکریپت در حال اجراست، توی همون کنسول بنویس `delete` و اینتر بزن → گاوصخچه، فایل کلید و کوکی‌ها **بلافاصله و خودکار** پاک می‌شن
-- **فلگ حذف:** `node kata-ut.mjs --delete` — همین کار، حتی وقتی اسکریپت در حال اجرا نیست
-
-پاک‌سازی فوری و بدون ردپاست: نه ایمیل، نه رمز، نه شناسه‌ی سرور — هیچی دیگه روی دیسک نمی‌مونه. برای شروع دوباره فقط کافیه `node kata-ut.mjs` رو دوباره اجرا کنی.
+- **از سایت:** بخش «پنل حساب من» → کارت «حذف حساب از سایت» → یک کلیک؛ همه‌چیز از مرورگر پاک می‌شود
+- **از اسکریپت:** تایپ `delete` در کنسول، یا `node index.js --delete` — فایل شخصی و سشن همان لحظه حذف می‌شوند (اگر خود-حذفی ممکن نباشد، فقط `index.js` را از تب Files پنل پاک کن)
 
 ### عیب‌یابی
 
-- **کپچا / لاگین نشد:** یک بار `node kata-ut.mjs --login` را اجرا کن (روی کامپیوتر خودت هم می‌شود؛ بعد فایل `kata-renew-data.json` را کنار اسکریپت روی هاست کپی کن).
-- **خطای لاگین (کد ۲/۳):** تا وقتی کنسول در دسترس باشه، اسکریپت زنده می‌مونه، هر ۱۵ دقیقه خودش دوباره تلاش می‌کنه و کنسول زنده‌ست — همون‌جا می‌تونی `renew` (تلاش فوری) یا `delete` (حذف اطلاعات) بزنی.
-- **دکمهٔ Renew پیدا نشد:** احتمالاً هنوز در بازهٔ ۴ روزه نیستی؛ چرخه‌ی بعدی (فردا) دوباره امتحان می‌کند. برای دیدن صفحات واقعی پنل: `KATA_DEBUG=1 node kata-ut.mjs --once`
-- **گاوصخچه خراب شد** (مثلاً فایل کلید پاک شده): `node kata-ut.mjs --setup` — اطلاعات نو را وارد کن.
-- **کدهای خروج:** `0` موفق یا نیازی‌نبود، `2` مشکل لاگین، `3` چالش کلادفلر، `4` دکمه پیدا نشد، `5` کپچا روی تمدید — (کدهای ۲/۳ فقط وقتی خارج می‌شوند که کنسولی وصل نباشد؛ در غیر این صورت اسکریپت زنده می‌ماند و خودش دوباره تلاش می‌کند).
+- **کپچا / لاگین نشد:** بخش کپچای بالا — یک بار `--login` روی کامپیوتر خودت.
+- **دکمه‌ی Renew پیدا نشد:** احتمالاً هنوز در بازه‌ی تمدید نیستی؛ چرخه‌ی بعدی (فردا) دوباره امتحان می‌کند. برای دیدن صفحات واقعی پنل: `KATA_DEBUG=1 node index.js --once`
+- **تغییر اطلاعات:** در سایت به‌روزرسانی کن، دوباره `index.js` بساز و جایگزین قبلی کن (فایل‌های کوکی سالم می‌مانند).
+- **کدهای خروج:** `0` موفق/لازم‌نبود، `2` مشکل لاگین، `3` چالش کلادفلر، `4` دکمه پیدا نشد، `5` کپچا روی تمدید — در حالت پیش‌فرض اسکریپت بعد از این‌ها زنده می‌ماند و هر ۱۵ دقیقه دوباره تلاش می‌کند.
 
 ### ⚠️ سلب مسئولیت
 
@@ -103,11 +86,11 @@ KATA_EMAIL=you@example.com KATA_PASSWORD=secret KATA_SERVER_ID=84521 node kata-u
 
 ساخته شده توسط **[6amirreza6](https://github.com/6amirreza6)** در گیتهاب ❤️
 
-> ⚖️ این پروژه و تمام اجزای آن — کد، سایت، تصاویر و ایده — به‌طور کامل متعلق به **6amirreza6** است.
+> ⚖️ این پروژه و تمام اجزای آن — کد، سایت، اسکریپت ساخته‌شده، تصاویر و ایده — به‌طور کامل متعلق به **6amirreza6** است. واترمارک و نام نویسنده در تمام بخش‌ها (سایت و فایل ساخته‌شده) تعبیه شده است.
 
 ### 📄 لایسنس
 
-[MIT](LICENSE) © 2026 **6amirreza6** — تمام حقوق این پروژه متعلق به 6amirreza6 است؛ استفاده و کپی با ذکر منبع آزاد است.
+[MIT](LICENSE) © 2026 **6amirreza6** — تمام حقوق این پروژه متعلق به 6amirreza6 است. بر اساس MIT، هر کپی از این کد **باید** اعلان کپی‌رایت و نام نویسنده را حفظ کند؛ حذف واترمارک نقض لایسنس است.
 
 ---
 
@@ -115,78 +98,62 @@ KATA_EMAIL=you@example.com KATA_PASSWORD=secret KATA_SERVER_ID=84521 node kata-u
 
 ### What is this?
 
-**Free** [KataBump](https://katabump.com) servers must be renewed from the panel every **4 days** or they go offline. This is an interactive script you run **inside the terminal of your own KataBump host** — it asks once for your **email, password and Server ID**, locks everything in an **encrypted vault**, and then renews the server automatically **every 24 hours**. The host you are running it on keeps itself alive.
+**Free** [KataBump](https://katabump.com) servers must be renewed from the panel every few days or they go offline. **KataBumpUT** is an **account panel that lives on the website**: you enter your email, password and Server IDs right there, set up your account, add/remove/change servers — and one button hands you a personalized **`index.js`** with everything sealed inside. Upload that file in the KataBump panel and hit Restart — done! From then on it renews your server automatically **every 24 hours**.
 
-- Zero dependencies — just Node.js 18+
-- **AES-256-GCM vault:** your email and password are never stored in plain text; the encryption key is split into two halves kept in two separate hidden locations
-- **Server ID aware:** goes straight to your own server page (e.g. `dashboard.katabump.com/server/84521`); multiple IDs separated by commas are supported
-- **24h cycle:** one renewal run per day; failed attempts retry after 15 minutes
-- Browser mode for the Cloudflare Turnstile captcha
+**Why no terminal?** Because the KataBump host terminal cannot run interactive scripts — no commands, no wizard input. So nothing is asked from the terminal anymore: your info comes from the **site**, gets **sealed** into the generated file, and the script runs **silently and fully automatically**.
+
+- 🖥️ **Everything from the site:** enter info, create your account, manage servers (add/remove/change), download the script, delete your info
+- 🔐 **Encrypted vault:** your info is locked in your own browser with **AES-256-GCM** and never sent anywhere; inside the generated file it is embedded encrypted as well (no plain text)
+- ⏰ **24h cycle:** one renewal per day; failed attempts retry after 15 minutes
+- 🚫 **No terminal, no typing, no dependencies:** the generated file only needs Node.js 18+
+- 🧩 **Multiple servers:** manage as many free servers as you have, right on the site
+- 🧯 **Automatic delete:** one click on the site — or `delete` / `--delete` inside the script (which even removes its own file)
 
 <div align="center">
 <img src="assets/demo.png" alt="Demo run" width="720">
 </div>
 
-### Quick start (in the KataBump terminal)
+### Three steps (without a single command)
 
-```bash
-# Option 1 — direct download
-curl -O https://raw.githubusercontent.com/6amirreza6/KatabumpUT/main/kata-ut.mjs
-node kata-ut.mjs
+1. **Open the [site](https://6amirreza6.github.io/KatabumpUT/)** → “My account panel” → enter your email, password and servers → Save
+2. Press **“Build & download script”** → get your personal `index.js`
+3. In the KataBump panel: **Files** tab → **Upload** `index.js` → **Restart**
 
-# Option 2 — clone
-git clone https://github.com/6amirreza6/KatabumpUT.git
-cd KatabumpUT
-node kata-ut.mjs
-```
+That's it! The panel log now shows a successful renewal every 24 hours.
 
-The first run shows a tiny wizard: email → password (masked) → Server ID (the number at the end of your panel URL; press Enter to auto-detect). After that it never asks again!
-
-### Modes
+### What the generated `index.js` can do
 
 | Command | What it does |
 |---|---|
-| `node kata-ut.mjs` | Renews now, then keeps auto-renewing every 24h — fully automatic |
-| `node kata-ut.mjs --loop` | Stays running and renews every 24 hours (recommended) |
-| `node kata-ut.mjs --once` | Single renewal, then exits |
-| `node kata-ut.mjs --setup` | Re-enter your info (fresh vault) |
-| `node kata-ut.mjs --status` | Show vault + last renewal state |
-| `node kata-ut.mjs --delete` | 🔥 **Delete my info:** wipes everything instantly & automatically (legacy `--reset` still works) |
-| `node kata-ut.mjs --login` | Browser mode for the Turnstile captcha (needs `npm i playwright && npx playwright install chromium`) |
+| `node index.js` | Renews now, then keeps auto-renewing every 24h (default) |
+| `node index.js --once` | Single renewal, then exits |
+| `node index.js --status` | Show last renewal state and interval |
+| `node index.js --delete` | 🔥 **Delete my info:** wipes the personal file and session instantly (self-delete) |
+| `node index.js --login` | Browser mode for the Turnstile captcha — only on your own PC with playwright |
 
-Or skip the wizard with environment variables:
-```bash
-KATA_EMAIL=you@example.com KATA_PASSWORD=secret KATA_SERVER_ID=84521 node kata-ut.mjs --loop
-```
+While running, a live console is also available: `renew` · `status` · `delete` · `exit`.
 
-### How it works
+### Where your info lives
 
-1. Connects to `dashboard.katabump.com` using cached cookies (or a fresh login)
-2. Goes straight to your server page and looks for the **Renew** button/form
-3. Submits the form with all its hidden fields (tokens included)
-4. If the panel requires a captcha, it tells you to run the `--login` browser mode once
-5. Waits at least 23 hours between successful renewals to keep behavior gentle and human-like
+- **On the site:** only inside your own browser (localStorage), sealed with AES-256-GCM, never sent to any server. The “Delete my info” button destroys both data and key.
+- **Inside `index.js`:** your info is AES-256-GCM encrypted and the key is split into two masked halves — a casual grep of the file reveals nothing. Remember this file is **personal**; treat it like your password.
+- Session cookies live in a separate `.kbu-session.json` (no secrets inside) next to the script.
 
-### Where is my info stored?
+### Captcha (Cloudflare Turnstile)
 
-In the **vault**. During setup a random 256-bit key is generated and your info is sealed with **AES-256-GCM**; the key is then split in two halves stored in two separate paths. Result: finding a single file reveals nothing — no email, no password, no server ID ever exists in plain text. And `--delete` (or typing `delete` in the live console) wipes everything without a trace.
+If the HTTP login hits a captcha, the script does not give up: it retries automatically every 15 minutes. For a definitive fix, run `node index.js --login` once on your own PC (playwright solves the captcha and saves the session) — then place `.kbu-session.json` next to `index.js` on the host.
 
 ### 🔥 Delete my information (fully automatic)
 
-Whenever you want everything gone, there are two ways — and neither asks extra questions:
-
-- **Type in the live console:** while the script is running, type `delete` and hit Enter → the vault, its key file and the session cookies are wiped **instantly and automatically**
-- **The flag:** `node kata-ut.mjs --delete` — same thing, even when the script is not running
-
-It is an instant, traceless wipe: no email, no password, no server ID — nothing is left on disk. To start over, just run `node kata-ut.mjs` again.
+- **From the site:** “My account panel” → “Delete account from the site” card → one click wipes everything from your browser
+- **From the script:** type `delete` in the console, or run `node index.js --delete` — the personal file and session are wiped instantly (if self-delete is not possible, just remove `index.js` in the panel Files tab)
 
 ### Troubleshooting
 
-- **Captcha / login fails:** run `node kata-ut.mjs --login` once (also works on your own PC — then copy `kata-renew-data.json` next to the script on the host).
-- **Login failure (exit codes 2/3):** as long as a console is attached, the script stays alive, retries automatically every 15 minutes and keeps the live console — you can type `renew` (retry now) or `delete` (wipe my info) right there.
-- **Renew button not found:** you are probably outside the 4-day window; the next daily cycle will try again. Inspect real panel pages with `KATA_DEBUG=1 node kata-ut.mjs --once`
-- **Vault unreadable** (e.g. its key file was lost): run `node kata-ut.mjs --setup` and enter fresh info.
-- **Exit codes:** `0` ok / not needed, `2` login problem, `3` Cloudflare challenge, `4` button not found, `5` captcha on renew — (codes 2/3 only exit when no console is attached; otherwise the script stays alive and retries on its own).
+- **Captcha / login fails:** see the captcha section above — run `--login` once on your own PC.
+- **Renew button not found:** you are probably outside the renewal window; the next daily cycle retries. Inspect real panel pages with `KATA_DEBUG=1 node index.js --once`
+- **Changed your info?** Update it on the site, build a fresh `index.js` and replace the old one (session cookies stay valid).
+- **Exit codes:** `0` ok / not needed, `2` login problem, `3` Cloudflare challenge, `4` button not found, `5` captcha on renew — in the default mode the script stays alive after these and retries every 15 minutes.
 
 ### ⚠️ Disclaimer
 
@@ -196,11 +163,11 @@ This tool is for **your own server** and **your own account** — educational an
 
 Made by **[6amirreza6](https://github.com/6amirreza6)** on GitHub ❤️
 
-> ⚖️ This project and all of its parts — code, website, artwork and the idea — fully belong to **6amirreza6**.
+> ⚖️ This project and all of its parts — code, website, generated script, artwork and the idea — fully belong to **6amirreza6**. Watermarks and author credits are embedded in every part (site and generated file).
 
 ### 📄 License
 
-[MIT](LICENSE) © 2026 **6amirreza6** — all rights of this project belong to 6amirreza6; use and copying with attribution is allowed.
+[MIT](LICENSE) © 2026 **6amirreza6** — all rights of this project belong to 6amirreza6. Under MIT, every copy of this code **must** keep the copyright notice and author credit; removing the watermark is a license violation.
 
 ---
 

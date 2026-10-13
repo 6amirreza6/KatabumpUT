@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KataBumpUT — Auto Renew for free KataBump servers</title>
 <meta name="description" content="Free open-source tool that auto-renews your free KataBump server every 24h. Encrypted vault (AES-256-GCM), zero dependencies, Node 18+. Made by 6amirreza6.">
+<meta name="author" content="6amirreza6">
+<meta name="copyright" content="© 2026 6amirreza6 — all rights reserved (MIT) · github.com/6amirreza6/KatabumpUT">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='18' fill='%23a78bfa'/%3E%3Cellipse cx='32' cy='32' rx='30' ry='9' fill='none' stroke='%2322d3ee' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,9 +51,29 @@
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .subtitle{color:var(--dim);font-size:1.12rem;max-width:640px;margin:0 auto 30px}
   .subtitle b{color:var(--txt)}
-  .install{display:flex;align-items:center;gap:10px;max-width:680px;margin:0 auto 26px;background:#0b0e1e;border:1px solid var(--line);border-radius:14px;padding:13px 16px;direction:ltr}
-  .install code{flex:1;font-family:var(--mono);font-size:.8rem;color:#c9d4ff;word-break:break-all;line-height:1.5;text-align:left}
-  .copy{cursor:pointer;border:0;border-radius:9px;padding:8px 14px;background:linear-gradient(90deg,var(--violet),var(--cyan));color:#0b0e1e;font-weight:700;font-size:.8rem;font-family:inherit}
+  .flowline{color:var(--dim);font-size:.92rem;margin:0 auto 26px;max-width:640px}
+  .flowline b{color:var(--cyan);font-weight:800}
+  /* --- watermark everywhere --- */
+  .hero,.panel,.sec > .wrap{position:relative}
+  .wm{position:absolute;inset-inline-end:2px;bottom:2px;font-family:var(--mono);font-weight:700;font-size:clamp(56px,9vw,110px);letter-spacing:5px;color:rgba(255,255,255,.032);pointer-events:none;user-select:none;direction:ltr;line-height:1;white-space:nowrap;z-index:0}
+  #wmBadge{position:fixed;bottom:16px;inset-inline-start:16px;z-index:55;display:inline-flex;align-items:center;gap:8px;background:rgba(10,13,26,.85);border:1px solid var(--line);border-radius:999px;padding:8px 15px;color:var(--dim);font-size:.78rem;font-family:var(--mono);backdrop-filter:blur(10px);transition:.2s}
+  #wmBadge:hover{color:var(--cyan);border-color:var(--cyan);transform:translateY(-2px)}
+  #wmBadge svg{width:15px;height:15px;flex-shrink:0}
+  /* --- server list chips + build button --- */
+  .addrow{display:flex;gap:9px}
+  .addrow .iwrap{flex:1}
+  .btn-add{cursor:pointer;border:1px solid rgba(167,139,250,.45);background:rgba(167,139,250,.12);color:#c4b5fd;border-radius:11px;padding:0 18px;font-weight:800;font-size:1.05rem;font-family:inherit;transition:.2s;flex-shrink:0}
+  .btn-add:hover{background:rgba(167,139,250,.22);border-color:var(--violet);transform:translateY(-1px)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chips .none{color:#6b7490;font-size:.8rem}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:999px;padding:5px 6px 5px 12px;font-family:var(--mono);font-size:.8rem;color:#a5f3fc;direction:ltr}
+  .chip .x{cursor:pointer;border:0;background:rgba(255,255,255,.08);color:var(--dim);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;line-height:1;transition:.15s}
+  .chip .x:hover{background:rgba(248,113,113,.28);color:#fca5a5}
+  .btn-build{width:100%;cursor:pointer;border:0;border-radius:12px;padding:13px;background:linear-gradient(90deg,var(--cyan),var(--green));color:#0b0e1e;font-weight:800;font-size:.95rem;font-family:inherit;transition:.2s;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px}
+  .btn-build:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  .btn-build svg{width:17px;height:17px}
+  .btn-build:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:none}
+  .buildhint{color:#7c86a0;font-size:.75rem;margin-top:9px;line-height:1.75;text-align:center}
   .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:11px 22px;font-weight:700;font-size:.95rem;border:1px solid var(--line);color:var(--txt);transition:.2s}
   .btn.primary{background:linear-gradient(90deg,rgba(167,139,250,.18),rgba(34,211,238,.18));border-color:rgba(167,139,250,.4)}
@@ -190,10 +212,7 @@
     <span class="pill"><span class="dot"></span><span data-i="pill">متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump</span></span>
     <h1 class="title">KataBumpUT</h1>
     <p class="subtitle" data-i="hero_sub">سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.</p>
-    <div class="install">
-      <code id="cmd">curl -O https://raw.githubusercontent.com/6amirreza6/KatabumpUT/main/kata-ut.mjs &amp;&amp; node kata-ut.mjs</code>
-      <button class="copy" id="copyBtn" type="button" data-i="copy">کپی</button>
-    </div>
+    <p class="flowline" data-i="hero_flow">اسکریپت اختصاصی‌ت رو از <b>پنل حساب</b> بساز و دانلود کن — بدون حتی یک دستور ترمینالی.</p>
     <div class="ctas">
       <a class="btn primary" href="https://github.com/6amirreza6/KatabumpUT" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.7 4.9 17.7 5.2 17.7 5.2c.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
@@ -211,21 +230,21 @@
       <span class="badge"><b>Node 18+</b></span>
       <span class="badge"><b>MIT</b> · <span data-i="b4">© تمام حقوق برای 6amirreza6</span></span>
     </div>
+    <span class="wm" aria-hidden="true">6amirreza6</span>
   </header>
 
   <div class="wrap panel">
     <h2 data-i="panel_h">پنل پرواز</h2>
-    <p class="hint" data-i="panel_hint">این‌طور به‌نظر می‌رسه وقتی اسکریپت روی هاست خودت اجرا می‌شه — بدون هیچ دخالتی.</p>
+    <p class="hint" data-i="panel_hint">اسکریپت شخصی‌ای که از پنل حساب می‌سازی، روی هاست این‌طور اجرا می‌شه — بدون حتی یک تایپ.</p>
+    <span class="wm" aria-hidden="true">6amirreza6</span>
     <div class="pgrid">
       <div class="term">
-        <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>KataBump Terminal — node kata-ut.mjs</span></div>
-        <pre><span class="cm">$</span> node kata-ut.mjs
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>KataBump Server — node index.js</span></div>
+        <pre><span class="cm">$</span> node index.js
 
-<span class="q">?</span> Your KataBump email: player@example.com
-<span class="q">?</span> Your KataBump password: ************
-<span class="q">?</span> Your Server ID: 84521
-
-<span class="st">✦</span> Vault locked — AES-256-GCM
+<span class="st">★</span> Made by 6amirreza6 on GitHub
+<span class="st">✦</span> Personal vault unsealed — AES-256-GCM
+<span class="q">🔑</span> No valid session — logging in...
 <span class="ok">✓</span> Login successful.
 <span class="ok">✦</span> Renew successful! Next run in 24h.
 <span class="cm">⌨</span> renew · status · delete · exit <span class="cursor"></span></pre>
@@ -250,7 +269,8 @@
   <section class="sec" id="account">
     <div class="wrap">
       <h2 data-i="acc_h">پنل حساب من</h2>
-      <p class="lead" data-i="acc_lead">همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، هر وقت خواستی ببینش و هر وقت خواستی با یه کلیک پاکش کن. هیچ‌چیز از مرورگرت بیرون نمی‌ره.</p>
+      <p class="lead" data-i="acc_lead">همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، اکانتت رو بساز و هر وقت خواستی سرور اضافه یا حذف کن، بعد اسکریپت شخصی‌ت رو بگیر. هیچ‌چیز از مرورگرت بیرون نمی‌ره.</p>
+      <span class="wm" aria-hidden="true">6amirreza6</span>
       <div class="acc-grid">
         <div class="acc-card">
           <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span data-i="acc1_h">ورود اطلاعات حساب</span></h3>
@@ -269,9 +289,13 @@
             <div class="hint" data-i="hint_pw">رمز اکانت کاتابامپت؛ رمزنگاری‌شده ذخیره می‌شه و هیچ‌جا نمایش داده نمی‌شه — دکمه‌ی چشم فقط موقتاً نشونش می‌ده.</div>
           </div>
           <div class="field">
-            <label for="inSid" data-i="lbl_sid">شناسه‌ی سرور (Server ID)</label>
-            <div class="iwrap"><input id="inSid" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="84521"></div>
-            <div class="hint" data-i="hint_sid">عدد آخر آدرس سرورت توی پنل، مثل /server/84521. چند سرور داری؟ با کاما جدا کن: 84521,84522 — خالی بذاری هم اشکالی نداره.</div>
+            <label for="inSid" data-i="lbl_sid">سرورهای من (Server ID)</label>
+            <div class="addrow">
+              <div class="iwrap"><input id="inSid" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="84521"></div>
+              <button class="btn-add" id="btnAddSrv" type="button" title="+">+</button>
+            </div>
+            <div class="chips" id="srvChips"></div>
+            <div class="hint" data-i="hint_sid">عدد آخر آدرس سرورت توی پنل، مثل /server/84521 — هر بار یکی رو وارد کن و + رو بزن. افزودن، حذف و تغییر سرورها همین‌جاست و خالی بودنش هم اشکالی نداره.</div>
           </div>
           <button class="btn-save" id="btnSave" type="button" data-i="btn_save">ذخیره در گاوصخچه</button>
         </div>
@@ -279,6 +303,11 @@
           <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 15h.01M11 15h6"/><circle cx="9" cy="10" r="1.6"/></svg></span><span data-i="acc2_h">اطلاعات حساب</span></h3>
           <p class="exp" data-i="acc2_exp">اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.</p>
           <div id="accInfo"></div>
+          <button class="btn-build" id="btnBuild" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            <span data-i="btn_build">ساخت و دانلود اسکریپت (index.js)</span>
+          </button>
+          <div class="buildhint" data-i="build_hint">این دکمه یک index.js شخصی‌سازی‌شده می‌سازه: اطلاعات تو داخلش با AES-256-GCM قفل شده — فقط در تب Files پنل کاتابامپ آپلودش کن و Restart بزن؛ نه ترمینال، نه تایپ. این فایل مخصوص خودته، جایی نفرستش.</div>
         </div>
       </div>
       <div class="acc-card acc-danger">
@@ -295,6 +324,7 @@
   <section class="sec">
     <div class="wrap">
       <h2 data-i="feat_h">چرا خفنه؟</h2>
+      <span class="wm" aria-hidden="true">6amirreza6</span>
       <p class="lead" data-i="feat_lead"></p>
       <div class="grid3">
         <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3 data-i="f1_h">چرخه‌ی ۲۴ ساعته</h3><p data-i="f1_p">هر شب یه دور تمدید؛ اگه یه تلاش شکست بخوره، ۱۵ دقیقه بعد دوباره امتحان می‌کنه تا بالاخره بشه.</p></div>
@@ -309,6 +339,7 @@
 
   <section class="sec" id="security">
     <div class="wrap">
+      <span class="wm" aria-hidden="true">6amirreza6</span>
       <div class="vault">
         <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg></div>
         <div>
@@ -328,6 +359,7 @@
   <section class="sec faq" id="faq">
     <div class="wrap">
       <h2 data-i="faq_h">سؤالات پرتکرار</h2>
+      <span class="wm" aria-hidden="true">6amirreza6</span>
       <p class="lead" data-i="faq_lead">چیزهایی که بیشتر از همه پرسیده می‌شه.</p>
       <details>
         <summary><span data-i="q1">شناسه‌ی سرور (Server ID) رو از کجا پیدا کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -339,11 +371,11 @@
       </details>
       <details>
         <summary><span data-i="q3">اگه کپچا بیاد چی؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a3">یه بار <code class="k">node kata-ut.mjs --login</code> رو اجرا کن. یه مرورگر مخفی باز می‌کنه، کپچای Turnstile رو خودکار حل می‌کنه و سشن رو ذخیره می‌کنه. بعدش حالت عادی و چرخه‌ی ۲۴ ساعته از همون سشن استفاده می‌کنه.</div>
+        <div class="a" data-i="a3">فایل index.js ساخته‌شده رو یه بار روی کامپیوتر خودت با <code class="k">node index.js --login</code> اجرا کن (فقط اونجا playwright لازمه). یه مرورگر مخفی کپچای Turnstile رو خودکار حل می‌کنه و سشن ذخیره می‌شه؛ بعدش روی هاست هم از همون سشن استفاده می‌شه. بدون این هم اسکریپت هر ۱۵ دقیقه خودش دوباره تلاش می‌کنه.</div>
       </details>
       <details>
         <summary><span data-i="q4">روی کامپیوتر خودم هم کار می‌کنه؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a4">آره! فقط Node 18+ لازمه. خیلی‌ها روی PC خودشون اجراش می‌کنن تا سشن بسازن یا اصلاً روزانه نگهش دارن — لازم نیست حتماً روی هاست باشه.</div>
+        <div class="a" data-i="a4">آره! از پنل حساب، index.js رو دانلود کن و روی کامپیوترت <code class="k">node index.js</code> رو بزن — همون‌طور هر ۲۴ ساعت خودش تمدید می‌کنه. برای ساخت سشن کپچا هم با <code class="k">--login</code> همینه.</div>
       </details>
       <details>
         <summary><span data-i="q5">قوانین کاتابامپ چی؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
@@ -351,11 +383,15 @@
       </details>
       <details>
         <summary><span data-i="q6">چطور اطلاعات خودم رو حذف کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a6">دو راه داری و هر دو کاملاً خودکارن: ۱) توی همین سایت، بخش «پنل حساب من» کارت «حذف حساب از سایت» — فقط دکمه‌ی «حذف اطلاعات من» رو بزن؛ همه‌چیز همان لحظه پاک می‌شه. ۲) برای اسکریپت روی هاست: وقتی در حال اجراست توی کنسول بنویس <code class="k">delete</code> یا یک‌بار <code class="k">node kata-ut.mjs --delete</code> رو اجرا کن؛ گاوصخچه، فایل کلید و کوکی‌ها بدون هیچ سؤالی پاک می‌شن.</div>
+        <div class="a" data-i="a6">همه‌چیز خودکاره: ۱) توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن. ۲) برای اسکریپت: توی کنسولش بنویس <code class="k">delete</code> یا یک‌بار <code class="k">node index.js --delete</code> رو اجرا کن — فایل شخصی و سشن همان لحظه پاک می‌شن؛ اگه حذف خودکار ممکن نشد، فقط index.js رو از تب Files پنل پاک کن.</div>
       </details>
       <details>
         <summary><span data-i="q7">اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
         <div class="a" data-i="a7">هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.</div>
+      </details>
+      <details>
+        <summary><span data-i="q8">اسکریپت ساخته‌شده رو چطور روی سرور بذارم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a8">نه ترمینال، نه دستور: پنل کاتابامپ → تب Files → فایل index.js رو Upload کن → Restart بزن. تمام! از این به بعد هر ۲۴ ساعت خودش تمدید می‌کنه. برای تغییر اطلاعات هم همین‌جا توی سایت به‌روزرسانی کن و فایل جدید رو جایگزین قبلی کن.</div>
       </details>
     </div>
   </section>
@@ -367,6 +403,11 @@
     </div>
   </footer>
 </main>
+
+<a id="wmBadge" href="https://github.com/6amirreza6" target="_blank" rel="noopener" title="Made by 6amirreza6 on GitHub">
+  <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="17" fill="#a78bfa"/><ellipse cx="32" cy="32" rx="30" ry="9" stroke="#22d3ee" stroke-width="3" transform="rotate(-20 32 32)"/><circle cx="45" cy="20" r="3" fill="#22d3ee"/></svg>
+  <span>© 6amirreza6 · KatabumpUT</span>
+</a>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -419,39 +460,39 @@
   }, 1000);
 })();
 
-/* ---- copy button ---- */
-(() => {
-  const btn = document.getElementById('copyBtn');
-  btn.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(document.getElementById('cmd').textContent.trim()); } catch { /* */ }
-    const old = btn.textContent;
-    btn.textContent = I18N[LANG].copied;
-    setTimeout(() => { btn.textContent = I18N[LANG].copy; }, 1400);
-  });
-})();
-
 /* ---- i18n ---- */
 const I18N = {
   fa: {
-    copy: 'کپی', copied: 'کپی شد!',
+    hero_flow: 'اسکریپت اختصاصی‌ت رو از <b>پنل حساب</b> بساز و دانلود کن — بدون حتی یک دستور ترمینالی.',
     nav_account: 'حساب من', nav_sec: 'امنیت', nav_faq: 'سؤالات',
     pill: 'متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump',
     hero_sub: 'سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.',
     cta_gh: 'مشاهده در گیتهاب', cta_acc: 'پنل حساب',
     b1: 'چرخه‌ی خودکار', b2: 'گاوصخچه‌ی رمزنگاری', b3: 'وابستگی', b4: '© تمام حقوق برای 6amirreza6',
-    panel_h: 'پنل پرواز', panel_hint: 'این‌طور به‌نظر می‌رسه وقتی اسکریپت روی هاست خودت اجرا می‌شه — بدون هیچ دخالتی.',
+    panel_h: 'پنل پرواز', panel_hint: 'اسکریپت شخصی‌ای که از پنل حساب می‌سازی، روی هاست این‌طور اجرا می‌شه — بدون حتی یک تایپ.',
     st1: 'تمدید بعدی تا', st2: 'گاوصخچه: قفل و ایمن', st3: 'سرور: زنده و تمدیدشده',
     acc_h: 'پنل حساب من',
-    acc_lead: 'همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، هر وقت خواستی ببینش و هر وقت خواستی با یه کلیک پاکش کن. هیچ‌چیز از مرورگرت بیرون نمی‌ره.',
+    acc_lead: 'همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، اکانتت رو بساز و هر وقت خواستی سرور اضافه یا حذف کن، بعد اسکریپت شخصی‌ت رو بگیر. هیچ‌چیز از مرورگرت بیرون نمی‌ره.',
     acc1_h: 'ورود اطلاعات حساب',
     acc1_exp: 'ایمیل و رمز اکانت کاتابامپت و شناسه‌ی سرورت رو وارد کن و «ذخیره در گاوصخچه» رو بزن؛ اطلاعات همین لحظه با AES-256-GCM رمز می‌شه و فقط توی مرورگر خودت قفل می‌شه — هیچ سروری در کار نیست.',
     lbl_email: 'ایمیل کاتابامپ',
     hint_email: 'همون ایمیلی که باهاش توی پنل کاتابامپ (dashboard.katabump.com) ثبت‌نام کردی.',
     lbl_pw: 'رمز اکانت',
     hint_pw: 'رمز اکانت کاتابامپت؛ رمزنگاری‌شده ذخیره می‌شه و هیچ‌جا نمایش داده نمی‌شه — دکمه‌ی چشم فقط موقتاً نشونش می‌ده.',
-    lbl_sid: 'شناسه‌ی سرور (Server ID)',
-    hint_sid: 'عدد آخر آدرس سرورت توی پنل، مثل /server/84521. چند سرور داری؟ با کاما جدا کن: 84521,84522 — خالی بذاری هم اشکالی نداره.',
+    lbl_sid: 'سرورهای من (Server ID)',
+    hint_sid: 'عدد آخر آدرس سرورت توی پنل، مثل /server/84521 — هر بار یکی رو وارد کن و + رو بزن. افزودن، حذف و تغییر سرورها همین‌جاست و خالی بودنش هم اشکالی نداره.',
     btn_save: 'ذخیره در گاوصخچه',
+    chips_none: 'هنوز سروری اضافه نشده',
+    remove: 'حذف',
+    added_srv: 'سرور اضافه شد ✓',
+    removed_srv: 'سرور حذف شد',
+    dup_srv: 'این سرور قبلاً اضافه شده',
+    ph_pw_keep: 'برای تغییر، رمز جدید را وارد کن',
+    updated_toast: 'اطلاعات حسابت به‌روزرسانی شد ✓',
+    btn_build: 'ساخت و دانلود اسکریپت (index.js)',
+    build_hint: 'این دکمه یک index.js شخصی‌سازی‌شده می‌سازه: اطلاعات تو داخلش با AES-256-GCM قفل شده — فقط در تب Files پنل کاتابامپ آپلودش کن و Restart بزن؛ نه ترمینال، نه تایپ. این فایل مخصوص خودته، جایی نفرستش.',
+    build_toast: 'index.js ساخته شد و دانلود شد — حالا در تب Files پنل کاتابامپ آپلودش کن و Restart بزن ✓',
+    build_err: 'ساخت اسکریپت ناموفق بود — دوباره امتحان کن',
     acc2_h: 'اطلاعات حساب',
     acc2_exp: 'اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.',
     kv_email: 'ایمیل', kv_pw: 'رمز', kv_sid: 'شناسه‌ی سرور', kv_enc: 'وضعیت', kv_at: 'ذخیره در',
@@ -485,38 +526,51 @@ const I18N = {
     q2: 'آیا رمزم امن می‌مونه؟',
     a2: 'رمزت با AES-256-GCM رمز می‌شه و کلیدش دو تکه و در دو مسیر جدا ذخیره می‌شه؛ هیچ‌جا به‌صورت متن ساده نوشته نمی‌شه و به هیچ سروری غیر از کاتابامپ هم فرستاده نمی‌شه. فقط یادت باشه این ابزار متن‌بازه — کسی که به کل سرور (شل کامل) دسترسی داشته باشه، مثل هر ابزار خودکاری، می‌تونه از همون مسیرها استفاده کنه.',
     q3: 'اگه کپچا بیاد چی؟',
-    a3: 'یه بار node kata-ut.mjs --login رو اجرا کن. یه مرورگر مخفی باز می‌کنه، کپچای Turnstile رو خودکار حل می‌کنه و سشن رو ذخیره می‌کنه. بعدش حالت عادی و چرخه‌ی ۲۴ ساعته از همون سشن استفاده می‌کنه.',
+    a3: 'فایل index.js ساخته‌شده رو یه بار روی کامپیوتر خودت با node index.js --login اجرا کن (فقط اونجا playwright لازمه). یه مرورگر مخفی کپچای Turnstile رو خودکار حل می‌کنه و سشن ذخیره می‌شه؛ بعدش روی هاست هم از همون سشن استفاده می‌شه. بدون این هم اسکریپت هر ۱۵ دقیقه خودش دوباره تلاش می‌کنه.',
     q4: 'روی کامپیوتر خودم هم کار می‌کنه؟',
-    a4: 'آره! فقط Node 18+ لازمه. خیلی‌ها روی PC خودشون اجراش می‌کنن تا سشن بسازن یا اصلاً روزانه نگهش دارن — لازم نیست حتماً روی هاست باشه.',
+    a4: 'آره! از پنل حساب، index.js رو دانلود کن و روی کامپیوترت node index.js رو بزن — همون‌طور هر ۲۴ ساعت خودش تمدید می‌کنه. برای ساخت سشن کپچا هم با --login همینه.',
     q5: 'قوانین کاتابامپ چی؟',
     a5: 'این ابزار فقط برای سرور و اکانت خودته و رفتارش عمداً ملایمه (حداقل ۲۳ ساعت بین تمدیدهای موفق). با این حال اتوماسیون ممکنه با قوانین هر سرویسی ناسازگار باشه — مسئولیت استفاده با خودته.',
     q6: 'چطور اطلاعات خودم رو حذف کنم؟',
-    a6: 'دو راه داری و هر دو کاملاً خودکارن: ۱) توی همین سایت، بخش «پنل حساب من» کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن و تمام. ۲) برای اسکریپت روی هاست: وقتی در حال اجراست توی کنسول بنویس delete یا یک‌بار node kata-ut.mjs --delete رو اجرا کن؛ گاوصخچه، فایل کلید و کوکی‌ها بدون هیچ سؤالی پاک می‌شن.',
+    a6: 'همه‌چیز خودکاره: ۱) توی همین سایت، کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن. ۲) برای اسکریپت: توی کنسولش بنویس delete یا یک‌بار node index.js --delete رو اجرا کن — فایل شخصی و سشن همان لحظه پاک می‌شن؛ اگه حذف خودکار ممکن نشد، فقط index.js رو از تب Files پنل پاک کن.',
     q7: 'اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟',
     a7: 'هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت (localStorage) ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.',
+    q8: 'اسکریپت ساخته‌شده رو چطور روی سرور بذارم؟',
+    a8: 'نه ترمینال، نه دستور: پنل کاتابامپ ← تب Files ← فایل index.js رو Upload کن ← Restart بزن. تمام! از این به بعد هر ۲۴ ساعت خودش تمدید می‌کنه. برای تغییر اطلاعات هم همین‌جا توی سایت به‌روزرسانی کن و فایل جدید رو جایگزین قبلی کن.',
     foot_made: 'ساخته‌شده توسط', foot_on: 'در گیتهاب',
     foot_lic: 'لایسنس MIT © 2026 — این پروژه به‌طور کامل متعلق به 6amirreza6 است؛ تمام حقوق محفوظ است.',
   },
   en: {
-    copy: 'Copy', copied: 'Copied!',
+    hero_flow: 'Build and download your personal script from the <b>Account panel</b> — without typing a single terminal command.',
     nav_account: 'My account', nav_sec: 'Security', nav_faq: 'FAQ',
     pill: 'Free & open source · keep your free KataBump server alive',
     hero_sub: 'Auto-renew your free KataBump server <b>every 24 hours</b> — just enter your email, password and <b>Server ID</b>; the encrypted vault handles the rest.',
     cta_gh: 'View on GitHub', cta_acc: 'Account panel',
     b1: 'auto cycle', b2: 'encrypted vault', b3: 'dependencies', b4: '© 6amirreza6 — all rights reserved',
-    panel_h: 'Flight panel', panel_hint: 'This is what it looks like while running on your own host — zero manual work.',
+    panel_h: 'Flight panel', panel_hint: 'This is your personal build running on your host — zero typing needed.',
     st1: 'Next renewal in', st2: 'Vault: locked & safe', st3: 'Server: alive & renewed',
     acc_h: 'My account panel',
-    acc_lead: 'Everything happens right here on this page: enter your account info, view it whenever you like and wipe it with one click. Nothing ever leaves your browser.',
+    acc_lead: 'Everything happens right here on this page: enter your account info, set up your account, add or remove servers anytime — then grab your personal script. Nothing ever leaves your browser.',
     acc1_h: 'Enter account info',
     acc1_exp: 'Type your KataBump email, account password and Server ID, then hit “Save to vault” — your info is sealed with AES-256-GCM on the spot and locked inside your own browser. No server involved.',
     lbl_email: 'KataBump email',
     hint_email: 'The email you signed up with on the KataBump panel (dashboard.katabump.com).',
     lbl_pw: 'Account password',
     hint_pw: 'Your KataBump account password; it is stored encrypted and never shown — the eye button only reveals it temporarily.',
-    lbl_sid: 'Server ID',
-    hint_sid: 'The number at the end of your server URL in the panel, like /server/84521. Multiple servers? Separate with commas: 84521,84522 — leaving it empty is fine too.',
+    lbl_sid: 'My servers (Server ID)',
+    hint_sid: 'The number at the end of your server URL in the panel, like /server/84521 — enter one at a time and press +. Add, remove or change servers right here; leaving it empty is fine too.',
     btn_save: 'Save to vault',
+    chips_none: 'no servers added yet',
+    remove: 'remove',
+    added_srv: 'Server added ✓',
+    removed_srv: 'Server removed',
+    dup_srv: 'This server is already in the list',
+    ph_pw_keep: 'type a new password to change it',
+    updated_toast: 'Your account info was updated ✓',
+    btn_build: 'Build & download script (index.js)',
+    build_hint: 'This button builds a personalized index.js: your info is sealed inside with AES-256-GCM — just upload it in the Files tab of the KataBump panel and hit Restart. No terminal, no typing. This file is yours only — never share it.',
+    build_toast: 'index.js built and downloaded — now upload it in the KataBump panel Files tab and hit Restart ✓',
+    build_err: 'Script build failed — please try again',
     acc2_h: 'Account info',
     acc2_exp: 'Your saved account info; the password is masked and only revealed temporarily with the eye button.',
     kv_email: 'Email', kv_pw: 'Password', kv_sid: 'Server ID', kv_enc: 'Status', kv_at: 'Saved at',
@@ -550,15 +604,17 @@ const I18N = {
     q2: 'Does my password stay safe?',
     a2: 'Your password is sealed with AES-256-GCM and the key is split across two separate paths; it is never written in plain text and never sent anywhere except KataBump. Note the tool is open source — anyone with full shell access to the server could, like with any automation tool, follow the same paths.',
     q3: 'What if a captcha shows up?',
-    a3: 'Run node kata-ut.mjs --login once. It opens a headless browser, solves the Turnstile captcha automatically and saves the session. The normal 24h cycle then reuses that session.',
+    a3: 'Run the generated index.js once on your PC with node index.js --login (playwright is only needed there). A headless browser solves the Turnstile captcha and saves the session; the host then reuses it. Even without that, the script retries automatically every 15 minutes.',
     q4: 'Does it work on my own PC?',
-    a4: 'Yes! You only need Node 18+. Many people run it on their PC to build a session or even keep it running daily — it does not have to live on the host.',
+    a4: 'Yes! Download index.js from the Account panel and run node index.js on your computer — it renews itself every 24 hours. Use --login the same way to build a captcha session.',
     q5: 'What about KataBump rules?',
     a5: 'This tool is for your own server and your own account only, and it is deliberately gentle (at least 23 hours between successful renewals). Still, automation may conflict with any service\'s terms — use it at your own risk.',
     q6: 'How do I delete my information?',
-    a6: 'Two ways, both fully automatic: 1) right here on this site — the “My account panel” section, “Delete account from the site” card: press “Delete my info” and it is done instantly. 2) For the script on your host: type delete in the console while it runs, or run node kata-ut.mjs --delete once; the vault, its key file and session cookies are wiped with no extra questions.',
+    a6: 'Everything is automatic: 1) on this site, the “Delete account from the site” card — press “Delete my info”. 2) For the script: type delete in its console or run node index.js --delete once — the personal file and session are wiped instantly; if self-delete is not possible, just remove index.js in the panel Files tab.',
     q7: 'Where does the info I save on the site go?',
     a7: 'Nowhere! It stays inside your own browser (localStorage), is sealed with AES-256-GCM and is never sent to any server. The “Delete my info” button destroys both the data and the encryption key forever.',
+    q8: 'How do I put the generated script on my server?',
+    a8: 'No terminal, no commands: KataBump panel → Files tab → Upload index.js → hit Restart. Done! From then on it renews itself every 24 hours. To change your info, update it here on the site and replace the file with a fresh build.',
     foot_made: 'Made by', foot_on: 'on GitHub',
     foot_lic: 'MIT License © 2026 — this project fully belongs to 6amirreza6. All rights reserved.',
   },
@@ -577,11 +633,11 @@ function applyLang() {
   btn.textContent = LANG === 'fa' ? 'EN' : 'فا';
   localStorage.setItem('kbu-lang', LANG);
 }
-document.getElementById('langBtn').addEventListener('click', () => { LANG = LANG === 'fa' ? 'en' : 'fa'; applyLang(); if (window.__renderAcc) window.__renderAcc(); });
+document.getElementById('langBtn').addEventListener('click', () => { LANG = LANG === 'fa' ? 'en' : 'fa'; applyLang(); if (window.__renderAcc) window.__renderAcc(); if (window.__renderChips) window.__renderChips(); if (window.__prefillAcc) window.__prefillAcc(); });
 applyLang();
 
-/* ---- my account panel: browser-local encrypted vault (AES-256-GCM) ---- */
-(() => {
+/* ---- my account panel: browser-local encrypted vault + personal script builder ---- */
+(async () => {
   const VKEY = 'kbu-dk', VDATA = 'kbu-vault';
   const $ = id => document.getElementById(id);
   const tenc = new TextEncoder(), tdec = new TextDecoder();
@@ -591,6 +647,8 @@ applyLang();
   const eyeSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   const row = (k, v) => '<div class="kv"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
   let revealPw = false;
+  let staged = [];      // server ids being managed in the form
+  let hasVault = false; // whether an account is saved
 
   async function getKey() {
     const raw = localStorage.getItem(VKEY);
@@ -620,52 +678,166 @@ applyLang();
     clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 3400);
   }
 
+  /* ---- server chips (add / remove / change) ---- */
+  function renderChips() {
+    const box = $('srvChips'), d = I18N[LANG];
+    if (!staged.length) { box.innerHTML = '<span class="none">' + d.chips_none + '</span>'; return; }
+    box.innerHTML = staged.map((s, i) =>
+      '<span class="chip">' + esc(s) + '<button class="x" data-i="' + i + '" type="button" title="' + d.remove + '\">\u2715</button></span>').join('');
+    box.querySelectorAll('.x').forEach(b => b.addEventListener('click', () => {
+      staged.splice(Number(b.dataset.i), 1);
+      renderChips();
+      if (hasVault) persistServers();
+    }));
+  }
+  async function persistServers() {
+    const acc = await readVault();
+    if (!acc) return;
+    localStorage.removeItem(VDATA);
+    localStorage.setItem(VDATA, JSON.stringify(await seal({email: acc.email, pw: acc.pw, sids: staged.slice(), at: acc.at})));
+    toast(I18N[LANG].removed_srv);
+    renderInfo();
+  }
+  function addServer() {
+    const inp = $('inSid'), d = I18N[LANG];
+    const v = (inp.value || '').replace(/\s+/g, '');
+    if (!v) return;
+    if (!/^\d+$/.test(v)) { toast(d.err_sid, 1); return; }
+    if (staged.includes(v)) { toast(d.dup_srv, 1); return; }
+    staged.push(v);
+    inp.value = '';
+    renderChips();
+    toast(d.added_srv);
+  }
+
+  /* ---- account info card ---- */
   async function renderInfo() {
     const box = $('accInfo'), d = I18N[LANG];
     const acc = await readVault();
+    hasVault = !!acc;
+    $('btnBuild').disabled = !acc;
     if (!acc) { box.innerHTML = '<div class="empty">' + d.acc_empty + '</div>'; return; }
+    if (!staged.length) staged = (acc.sids || []).slice();
     const masked = '\u2022'.repeat(Math.max(6, Math.min(acc.pw.length, 14)));
     const pwHtml = (revealPw ? esc(acc.pw) : masked) +
       '<button class="eye" id="eyeInfo" type="button" title="' + (revealPw ? d.hide : d.show) + '">' + eyeSvg + '</button>';
+    const chips = (acc.sids && acc.sids.length)
+      ? acc.sids.map(s => '<span class="chip">' + esc(s) + '<button class="x" data-sid="' + esc(s) + '" type="button" title="' + d.remove + '\">\u2715</button></span>').join('')
+      : '<span class="none">' + d.chips_none + '</span>';
     const dt = new Date(acc.at).toLocaleDateString(LANG === 'fa' ? 'fa-IR' : 'en-US');
     box.innerHTML =
       row(d.kv_email, esc(acc.email)) +
       row(d.kv_pw, pwHtml) +
-      row(d.kv_sid, esc(acc.sids || '\u2014')) +
+      '<div class="kv" style="align-items:flex-start"><span class="k" style="padding-top:9px">' + d.kv_sid + '</span><span class="v" style="flex-wrap:wrap;justify-content:flex-end">' + chips + '</span></div>' +
       row(d.kv_enc, '<span class="ok">\u2713 AES-256-GCM</span>') +
       row(d.kv_at, esc(dt));
     $('eyeInfo').addEventListener('click', () => { revealPw = !revealPw; renderInfo(); });
+    box.querySelectorAll('.x').forEach(b => b.addEventListener('click', async () => {
+      const sid = b.dataset.sid;
+      const cur = await readVault();
+      if (!cur) return;
+      const rest = (cur.sids || []).filter(x => x !== sid);
+      localStorage.removeItem(VDATA);
+      localStorage.setItem(VDATA, JSON.stringify(await seal({email: cur.email, pw: cur.pw, sids: rest, at: cur.at})));
+      staged = rest.slice();
+      renderChips();
+      toast(d.removed_srv);
+      renderInfo();
+    }));
   }
   window.__renderAcc = renderInfo;
+  window.__renderChips = renderChips;
+
+  /* ---- prefill the form from the saved vault ---- */
+  async function prefill() {
+    const acc = await readVault();
+    if (acc) {
+      $('inEmail').value = acc.email;
+      $('inPw').placeholder = I18N[LANG].ph_pw_keep;
+      staged = (acc.sids || []).slice();
+    }
+    renderChips();
+  }
+  window.__prefillAcc = prefill;
 
   $('eyePw').addEventListener('click', () => {
     const i = $('inPw'); i.type = i.type === 'password' ? 'text' : 'password';
   });
 
+  $('btnAddSrv').addEventListener('click', addServer);
+  $('inSid').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addServer(); } });
+
+  /* ---- save account (create or update) ---- */
   $('btnSave').addEventListener('click', async () => {
     const d = I18N[LANG];
     const email = $('inEmail').value.trim();
-    const pw = $('inPw').value;
-    const sids = $('inSid').value.replace(/\s+/g, '');
+    let pw = $('inPw').value;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast(d.err_email, 1); return; }
+    const prev = await readVault();
+    if (!pw && prev) pw = prev.pw; // keep the stored password when updating
     if (!pw) { toast(d.err_pw, 1); return; }
-    if (sids && !/^\d+(,\d+)*$/.test(sids)) { toast(d.err_sid, 1); return; }
     localStorage.removeItem(VDATA);
-    localStorage.setItem(VDATA, JSON.stringify(await seal({email: email, pw: pw, sids: sids, at: Date.now()})));
+    localStorage.setItem(VDATA, JSON.stringify(await seal({email: email, pw: pw, sids: staged.slice(), at: prev ? prev.at : Date.now()})));
     $('inPw').value = ''; $('inPw').type = 'password';
     revealPw = false;
-    toast(d.saved_toast);
+    toast(prev ? d.updated_toast : d.saved_toast);
     renderInfo();
   });
 
+  /* ---- delete my info (instant & automatic) ---- */
   $('btnWipe').addEventListener('click', () => {
     localStorage.removeItem(VDATA);
     localStorage.removeItem(VKEY);
     revealPw = false;
+    staged = [];
+    $('inEmail').value = '';
+    $('inPw').placeholder = '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022';
+    renderChips();
     toast(I18N[LANG].wipe_toast);
     renderInfo();
   });
 
+  /* ---- personal script builder (index.js) — same AES-256-GCM format the engine reads ---- */
+  const AAD_ENC = tenc.encode('KataBumpUT.gen.v1');
+  async function buildSealed(acc) {
+    const key = crypto.getRandomValues(new Uint8Array(32));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const kA = key.slice(0, 16), kB = key.slice(16);
+    const mask = new Uint8Array(await crypto.subtle.digest('SHA-256', tenc.encode('KataBumpUT.site.v1'))).slice(0, 16);
+    const kBm = kB.map((b, i) => b ^ mask[i]);
+    const k = await crypto.subtle.importKey('raw', key, 'AES-GCM', false, ['encrypt']);
+    const raw = new Uint8Array(await crypto.subtle.encrypt({name: 'AES-GCM', iv, additionalData: AAD_ENC}, k, tenc.encode(JSON.stringify({email: acc.email, password: acc.pw, sids: acc.sids || []}))));
+    const ct = raw.slice(0, raw.length - 16), tag = raw.slice(raw.length - 16);
+    return {v: 1, alg: 'aes-256-gcm', aad: 'KataBumpUT.gen.v1', iv: b64e(iv), tag: b64e(tag), ct: b64e(ct), kA: b64e(kA), kB: b64e(kBm)};
+  }
+
+  $('btnBuild').addEventListener('click', async () => {
+    const d = I18N[LANG];
+    const acc = await readVault();
+    if (!acc) { toast(d.err_pw, 1); return; }
+    $('btnBuild').disabled = true;
+    try {
+      const tpl = await (await fetch('./engine/kata-engine.js')).text();
+      const js = tpl
+        .replace('__VAULT__', JSON.stringify(await buildSealed(acc)))
+        .replace('__GENERATED_AT__', new Date().toISOString());
+      if (js.includes('__VAULT__') || js.includes('__GENERATED_AT__')) throw new Error('template');
+      const blob = new Blob([js], {type: 'text/javascript'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.js';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      toast(d.build_toast);
+    } catch (e) {
+      toast(d.build_err, 1);
+    }
+    $('btnBuild').disabled = !hasVault;
+  });
+
+  await prefill();
   renderInfo();
 })();
 </script>

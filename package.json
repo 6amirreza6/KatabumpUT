@@ -1,12 +1,9 @@
 {
   "name": "katabump-ut",
-  "version": "2.2.0",
-  "description": "Auto-renew your free KataBump server every 24h with an AES-256 encrypted vault — تمدید خودکار سرور رایگان کاتابامپ",
-  "main": "kata-ut.mjs",
-  "type": "module",
-  "scripts": {
-    "start": "node kata-ut.mjs"
-  },
+  "version": "3.0.0",
+  "description": "Auto-renew your free KataBump server every 24h — everything from the website panel, personalized index.js generator, no terminal needed — تمدید خودکار سرور رایگان کاتابامپ",
+  "author": "6amirreza6",
+  "license": "MIT",
   "keywords": [
     "katabump",
     "auto-renew",
@@ -14,13 +11,13 @@
     "free-hosting",
     "discord-bot-hosting",
     "minecraft-hosting",
-    "terminal",
-    "cli",
+    "no-terminal",
+    "web-panel",
+    "script-generator",
     "encrypted-vault",
+    "aes-256-gcm",
     "self-delete"
   ],
-  "author": "6amirreza6",
-  "license": "MIT",
   "engines": {
     "node": ">=18"
   }
