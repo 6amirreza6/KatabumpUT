@@ -1,0 +1,6 @@
+# runtime files (never commit these)
+kata-renew-data.json
+kata-debug-*.html
+.syscore.json
+.kxfx-*
+node_modules/
