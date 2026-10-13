@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * ═══════════════════════════════════════════════════════════════════════
- *   KataBumpUT v2.0 — Space Edition
+ *   KataBumpUT v2.1 — Space Edition
  *   Auto Renew for your free KataBump server
- *   Made by 6amirreza6  ·  License: Unlicense (public domain)
+ *   © 6amirreza6 — all rights reserved  ·  MIT License
  * ═══════════════════════════════════════════════════════════════════════
  *   Runs INSIDE the terminal of your own KataBump host.
  *   First run = a small setup wizard:
@@ -14,15 +14,18 @@
  *   The password is NEVER written to disk in plain text.
  *
  *   Usage:
- *     node kata-ut.mjs            → renew now, then offer 24h auto-renew
- *     node kata-ut.mjs --loop     → stay running, renew every 24h
+ *     node kata-ut.mjs            → renew now, then keep auto-renewing (fully automatic)
+ *     node kata-ut.mjs --loop     → same thing, explicit
  *     node kata-ut.mjs --once     → renew once, then exit
  *     node kata-ut.mjs --setup    → re-enter your info (re-lock the vault)
  *     node kata-ut.mjs --status   → show vault + last renewal state
- *     node kata-ut.mjs --reset    → wipe the vault and start over
+ *     node kata-ut.mjs --delete   → DELETE ALL your stored info instantly (alias: --reset)
  *     node kata-ut.mjs --login    → browser mode for Turnstile captcha
  *                                   (needs: npm i playwright
  *                                           npx playwright install chromium)
+ *
+ *   While it is running, the console is a LIVE panel — type:
+ *     renew  ·  status  ·  delete (wipe my info, instant & automatic)  ·  exit
  *
  *   Env (optional, skips the wizard):
  *     KATA_EMAIL=you@example.com KATA_PASSWORD=secret KATA_SERVER_ID=84521 node kata-ut.mjs
@@ -55,7 +58,7 @@ const has = f => args.includes(f);
 const MODE =
   has('--help')   ? 'help'   :
   has('--show')   ? 'show'   :
-  has('--reset')  ? 'reset'  :
+  (has('--reset') || has('--delete')) ? 'reset' :
   has('--status') ? 'status' :
   has('--setup')  ? 'setup'  :
   has('--login')  ? 'login'  :
@@ -83,10 +86,10 @@ const log = m => console.log(`${cDim('[' + nowStr() + ']')} ${m}`);
 function banner() {
   console.log('');
   console.log(cMag('   ★══════════════════════════════════════════════════★'));
-  console.log(cCyan('   ║          KataBumpUT  ·  Auto Renew  v2.0          ║'));
+  console.log(cCyan('   ║          KataBumpUT  ·  Auto Renew  v2.1          ║'));
   console.log(cCyan('   ║        space-grade renewal for free hosts         ║'));
   console.log(cMag('   ★══════════════════════════════════════════════════★'));
-  console.log(cDim('        github.com/6amirreza6  ·  Unlicense'));
+  console.log(cDim('     github.com/6amirreza6  ·  MIT © 6amirreza6 · all rights reserved'));
   console.log('');
 }
 
@@ -324,8 +327,9 @@ async function getCredentials() {
 /* ---------------- session cookies + state (plain file, no secrets) ---------------- */
 
 let data = { cookies: [], lastSuccessAt: null, lastResult: null };
+let wiped = false; // set the moment the user deletes their info — nothing may be written after
 try { const d = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')); if (d && Array.isArray(d.cookies)) data = { ...data, ...d }; } catch { /* first run */ }
-const saveData = () => { try { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); } catch { /* */ } };
+const saveData = () => { if (wiped) return; try { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); } catch { /* */ } };
 
 class Jar {
   static parseSetCookie(sc, url) {
@@ -733,17 +737,18 @@ function showStatus() {
 
 function printHelp() {
   console.log(`
-${cBold(cCyan('KataBumpUT v2.0'))} — auto renew for free KataBump servers
-${cDim('Made by 6amirreza6 · Unlicense (public domain)')}
+${cBold(cCyan('KataBumpUT v2.1'))} — auto renew for free KataBump servers
+${cDim('© 6amirreza6 — all rights reserved · MIT License')}
 
-  ${cBold('node kata-ut.mjs')}            renew now, then offer 24h auto-renew
-  ${cBold('node kata-ut.mjs --loop')}        stay running and renew every 24h
+  ${cBold('node kata-ut.mjs')}            renew now, then keep auto-renewing every 24h
+  ${cBold('node kata-ut.mjs --loop')}        the same, explicit
   ${cBold('node kata-ut.mjs --once')}        one attempt, then exit
   ${cBold('node kata-ut.mjs --setup')}       re-enter email / password / server id
   ${cBold('node kata-ut.mjs --status')}      show vault + renewal state
-  ${cBold('node kata-ut.mjs --reset')}       wipe stored info and start over
+  ${cBold('node kata-ut.mjs --delete')}      DELETE all stored info instantly (alias: --reset)
   ${cBold('node kata-ut.mjs --login')}       browser mode (captcha) — needs playwright
 
+  ${cDim('While running, type in this console:  renew · status · delete · exit')}
   ${cDim('Your info is stored encrypted (AES-256-GCM), never in plain text.')}
 `);
 }
@@ -755,44 +760,102 @@ async function runOnce(creds) {
   catch (e) { log(cRed(`✗ Unexpected error: ${e && e.stack ? e.stack.split('\n')[0] : e}`)); return 1; }
 }
 
+/* ---------------- live command bar — “delete my info”, and friends ---------------- */
+
+let kick = null; // set by startCycle — triggers an immediate renewal
+const stdinOpen = () => isTTY || pipedLines.length > 0 || !pipedClosed;
+
+function wipeMyInfo() {
+  wiped = true;
+  const n = wipeVault();
+  try { fs.unlinkSync(DATA_FILE); } catch { /* */ }
+  console.log('');
+  log(cGreen(`✦ Delete requested — all your info was wiped automatically (${n} file(s)).`));
+  log(cDim('   Vault, key file and session cookies are gone. Nothing is stored anymore.'));
+  log(cDim('   Run  node kata-ut.mjs  again to set up fresh.'));
+  process.exit(0);
+}
+
+async function commandBar() {
+  if (!stdinOpen()) return;
+  console.log(cDim('   ⌨  live console — type:  renew · status · delete (wipe my info) · exit'));
+  for (;;) {
+    if (!stdinOpen()) return;
+    let line = '';
+    try { line = ((await askLine('', false)) || '').trim().toLowerCase(); }
+    catch { return; }
+    if (!line) { if (!stdinOpen()) return; continue; }
+    if (line === 'delete' || line === 'reset' || line === 'wipe') {
+      wipeMyInfo();
+    } else if (line === 'status') {
+      showStatus();
+    } else if (line === 'renew') {
+      if (kick) { log(cCyan('⟳ Renewing right now...')); kick(); }
+      else log(cDim('ℹ  The first renewal is already running — this was it.'));
+    } else if (line === 'exit' || line === 'quit' || line === 'stop') {
+      console.log(cDim('◈ Bye!'));
+      process.exit(0);
+    } else {
+      console.log(cDim(`   unknown command: "${line}" — try:  renew · status · delete · exit`));
+    }
+  }
+}
+
+function startCycle(creds) {
+  const everyMs = RENEW_EVERY_HOURS * 36e5;
+  let timer = null;
+  let busy = false;
+  const cycle = async () => {
+    if (busy || wiped) return;
+    busy = true;
+    const c = await runOnce(creds);
+    busy = false;
+    if (wiped) return;
+    const delay = (c === 0 ? everyMs : RETRY_EVERY_MIN * 6e4) + rnd(-300, 300) * 1000;
+    timer = setTimeout(cycle, delay);
+    if (timer.unref) timer.unref();
+  };
+  kick = () => {
+    if (busy) { log(cDim('ℹ  a renewal is already running.')); return; }
+    if (timer) { clearTimeout(timer); timer = null; }
+    cycle();
+  };
+  timer = setTimeout(cycle, everyMs + rnd(-300, 300) * 1000);
+  if (timer.unref) timer.unref();
+}
+
 async function main() {
   if (MODE === 'help') { printHelp(); process.exit(0); }
   banner();
 
   if (MODE === 'show') { showVault(); process.exit(0); }
   if (MODE === 'status') { showStatus(); process.exit(0); }
-  if (MODE === 'reset') {
-    const n = wipeVault();
-    try { fs.unlinkSync(DATA_FILE); } catch { /* */ }
-    log(cGreen(`✦ Wiped (${n} file(s)) — everything forgotten. Run again to set up.`));
-    process.exit(0);
-  }
-  if (MODE === 'setup') { await setupWizard(); log(cDim('  tip: now run  node kata-ut.mjs --loop  for daily auto-renew.')); process.exit(0); }
+  if (MODE === 'reset') { wipeMyInfo(); }
+  if (MODE === 'setup') { await setupWizard(); log(cDim('  tip: just run  node kata-ut.mjs  — it renews and stays alive automatically.')); process.exit(0); }
   if (MODE === 'login') { await browserLogin(); process.exit(0); }
 
   const creds = await getCredentials();
+
+  // the console is a live panel from the very first second — typing
+  // 'delete' wipes every stored secret instantly, no questions asked
+  if (MODE !== 'once') commandBar().catch(() => {});
+
   const code = await runOnce(creds);
+  if (wiped) process.exit(0);
 
-  if (MODE === 'once' || code === 2 || code === 3) process.exit(code || 0);
+  if (MODE === 'once') process.exit(code || 0);
 
-  let keepRunning = MODE === 'loop';
-  if (!keepRunning) {
-    const a = await askLine(cCyan(`\n? Stay alive and auto-renew every ${RENEW_EVERY_HOURS}h? (Y/n): `), false);
-    keepRunning = a === '' || /^y(es)?$/i.test(a.trim());
+  if (code === 2 || code === 3) {
+    // login trouble — but as long as a console is attached we stay alive,
+    // keep retrying automatically and keep the live commands available
+    if (!stdinOpen()) process.exit(code);
+    log(cYellow('⚠  Login is not working yet — I will keep retrying automatically every 15 minutes.'));
+    log(cDim('   This console is still live:  renew (retry now) · status · delete (wipe my info) · exit'));
+  } else {
+    log(cGreen(`🚀 Auto-renew is ON — everything is automatic now: a cycle every ${RENEW_EVERY_HOURS}h (retry every ${RETRY_EVERY_MIN}m after failures).`));
+    log(cDim('   Live console:  renew · status · delete (wipe my info) · exit   — Ctrl+C to stop.'));
   }
-  if (!keepRunning) {
-    console.log(cDim('\n◈ Bye! Next time run  node kata-ut.mjs --loop  to skip this question.'));
-    process.exit(code || 0);
-  }
-
-  const everyMs = RENEW_EVERY_HOURS * 36e5;
-  log(cGreen(`🚀 Auto-renew is ON — a cycle every ${RENEW_EVERY_HOURS}h (retry every ${RETRY_EVERY_MIN}m after failures). Press Ctrl+C to stop.`));
-  const cycle = async () => {
-    const c = await runOnce(creds);
-    const delay = (c === 0 ? everyMs : RETRY_EVERY_MIN * 6e4) + rnd(-300, 300) * 1000;
-    setTimeout(cycle, delay);
-  };
-  setTimeout(cycle, everyMs + rnd(-300, 300) * 1000);
+  startCycle(creds);
 }
 
 process.on('SIGINT', () => { console.log(cDim('\n◈ Bye!')); process.exit(0); });

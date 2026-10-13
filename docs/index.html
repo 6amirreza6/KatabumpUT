@@ -168,7 +168,7 @@
       <span class="badge"><b>AES-256-GCM</b> · <span data-i="b2">گاوصخچه‌ی رمزنگاری</span></span>
       <span class="badge"><b>0</b> · <span data-i="b3">وابستگی</span></span>
       <span class="badge"><b>Node 18+</b></span>
-      <span class="badge"><b>Unlicense</b> · <span data-i="b4">مالکیت عمومی</span></span>
+      <span class="badge"><b>MIT</b> · <span data-i="b4">© تمام حقوق برای 6amirreza6</span></span>
     </div>
   </header>
 
@@ -186,7 +186,8 @@
 
 <span class="st">✦</span> Vault locked — AES-256-GCM
 <span class="ok">✓</span> Login successful.
-<span class="ok">✦</span> Renew successful! Next run in 24h. <span class="cursor"></span></pre>
+<span class="ok">✦</span> Renew successful! Next run in 24h.
+<span class="cm">⌨</span> renew · status · delete · exit <span class="cursor"></span></pre>
       </div>
       <div class="stats">
         <div class="stat">
@@ -258,7 +259,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l1">هیچ متن ساده‌ای روی دیسک: نه ایمیل، نه رمز، نه شناسه</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l2">رمزنگاری احراز‌شده (GCM) — دستکاری فایل قابل تشخیصه</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l3">اطلاعات فقط به خود dashboard.katabump.com می‌ره</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l4">با <code class="k">--reset</code> همه‌چیز بدون رد پا پاک می‌شه</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span data-i="sec_l4">با <code class="k">--delete</code> یا تایپ <code class="k">delete</code> در کنسول، همه‌چیز همان لحظه و بدون رد پا پاک می‌شه</span></li>
           </ul>
         </div>
       </div>
@@ -289,13 +290,17 @@
         <summary><span data-i="q5">قوانین کاتابامپ چی؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
         <div class="a" data-i="a5">این ابزار فقط برای سرور و اکانت خودته و رفتارش عمداً ملایمه (حداقل ۲۳ ساعت بین تمدیدهای موفق). با این حال اتوماسیون ممکنه با قوانین هر سرویسی ناسازگار باشه — مسئولیت استفاده با خودته.</div>
       </details>
+      <details>
+        <summary><span data-i="q6">چطور اطلاعات خودم رو حذف کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a6">خیلی ساده و کاملاً خودکار: وقتی اسکریپت در حال اجراست، توی کنسول بنویس <code class="k">delete</code> و اینتر بزن — یا یک‌بار <code class="k">node kata-ut.mjs --delete</code> رو اجرا کن. گاوصخچه، فایل کلید و کوکی‌ها همان لحظه و بدون هیچ سؤال اضافه‌ای پاک می‌شن و هیچی روی دیسک نمی‌مونه.</div>
+      </details>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
       <p><span data-i="foot_made">ساخته‌شده توسط</span> <a href="https://github.com/6amirreza6" target="_blank" rel="noopener">6amirreza6</a> <span data-i="foot_on">در گیتهاب</span> <span class="hearts">★</span></p>
-      <p class="lic" data-i="foot_lic">مجوز Unlicense — این پروژه متعلق به هیچ‌کس نیست؛ مالکیت عمومیه.</p>
+      <p class="lic" data-i="foot_lic">لایسنس MIT © 2026 — این پروژه به‌طور کامل متعلق به 6amirreza6 است؛ تمام حقوق محفوظ است.</p>
     </div>
   </footer>
 </main>
@@ -368,7 +373,7 @@ const I18N = {
     pill: 'متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump',
     hero_sub: 'سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.',
     cta_gh: 'مشاهده در گیتهاب', cta_guide: 'شروع سریع',
-    b1: 'چرخه‌ی خودکار', b2: 'گاوصخچه‌ی رمزنگاری', b3: 'وابستگی', b4: 'مالکیت عمومی',
+    b1: 'چرخه‌ی خودکار', b2: 'گاوصخچه‌ی رمزنگاری', b3: 'وابستگی', b4: '© تمام حقوق برای 6amirreza6',
     panel_h: 'پنل پرواز', panel_hint: 'این‌طور به‌نظر می‌رسه وقتی اسکریپت روی هاست خودت اجرا می‌شه — بدون هیچ دخالتی.',
     st1: 'تمدید بعدی تا', st2: 'گاوصخچه: قفل و ایمن', st3: 'سرور: زنده و تمدیدشده',
     guide_h: 'سه قدم تا آرامش',
@@ -391,7 +396,7 @@ const I18N = {
     sec_l1: 'هیچ متن ساده‌ای روی دیسک: نه ایمیل، نه رمز، نه شناسه',
     sec_l2: 'رمزنگاری احرازشده (GCM) — دستکاری فایل قابل تشخیصه',
     sec_l3: 'اطلاعات فقط به خود dashboard.katabump.com می‌ره',
-    sec_l4: 'با --reset همه‌چیز بدون رد پا پاک می‌شه',
+    sec_l4: 'با --delete یا تایپ delete در کنسول، همه‌چیز همان لحظه و بدون رد پا پاک می‌شه',
     faq_h: 'سؤالات پرتکرار',
     faq_lead: 'چیزهایی که بیشتر از همه پرسیده می‌شه.',
     q1: 'شناسه‌ی سرور (Server ID) رو از کجا پیدا کنم؟',
@@ -404,8 +409,10 @@ const I18N = {
     a4: 'آره! فقط Node 18+ لازمه. خیلی‌ها روی PC خودشون اجراش می‌کنن تا سشن بسازن یا اصلاً روزانه نگهش دارن — لازم نیست حتماً روی هاست باشه.',
     q5: 'قوانین کاتابامپ چی؟',
     a5: 'این ابزار فقط برای سرور و اکانت خودته و رفتارش عمداً ملایمه (حداقل ۲۳ ساعت بین تمدیدهای موفق). با این حال اتوماسیون ممکنه با قوانین هر سرویسی ناسازگار باشه — مسئولیت استفاده با خودته.',
+    q6: 'چطور اطلاعات خودم رو حذف کنم؟',
+    a6: 'خیلی ساده و کاملاً خودکار: وقتی اسکریپت در حال اجراست، توی کنسول بنویس delete و اینتر بزن — یا یک‌بار node kata-ut.mjs --delete رو اجرا کن. گاوصخچه، فایل کلید و کوکی‌ها همان لحظه و بدون هیچ سؤال اضافه‌ای پاک می‌شن و هیچی روی دیسک نمی‌مونه.',
     foot_made: 'ساخته‌شده توسط', foot_on: 'در گیتهاب',
-    foot_lic: 'مجوز Unlicense — این پروژه متعلق به هیچ‌کس نیست؛ مالکیت عمومیه.',
+    foot_lic: 'لایسنس MIT © 2026 — این پروژه به‌طور کامل متعلق به 6amirreza6 است؛ تمام حقوق محفوظ است.',
   },
   en: {
     copy: 'Copy', copied: 'Copied!',
@@ -413,7 +420,7 @@ const I18N = {
     pill: 'Free & open source · keep your free KataBump server alive',
     hero_sub: 'Auto-renew your free KataBump server <b>every 24 hours</b> — just enter your email, password and <b>Server ID</b>; the encrypted vault handles the rest.',
     cta_gh: 'View on GitHub', cta_guide: 'Quick start',
-    b1: 'auto cycle', b2: 'encrypted vault', b3: 'dependencies', b4: 'public domain',
+    b1: 'auto cycle', b2: 'encrypted vault', b3: 'dependencies', b4: '© 6amirreza6 — all rights reserved',
     panel_h: 'Flight panel', panel_hint: 'This is what it looks like while running on your own host — zero manual work.',
     st1: 'Next renewal in', st2: 'Vault: locked & safe', st3: 'Server: alive & renewed',
     guide_h: 'Three steps to peace of mind',
@@ -436,7 +443,7 @@ const I18N = {
     sec_l1: 'No plain text on disk: no email, no password, no IDs',
     sec_l2: 'Authenticated encryption (GCM) — tampering is detectable',
     sec_l3: 'Your info only goes to dashboard.katabump.com itself',
-    sec_l4: 'One --reset and everything is wiped without a trace',
+    sec_l4: 'One --delete (or typing delete in the console) wipes everything instantly, without a trace',
     faq_h: 'FAQ',
     faq_lead: 'The things people ask the most.',
     q1: 'Where do I find my Server ID?',
@@ -449,8 +456,10 @@ const I18N = {
     a4: 'Yes! You only need Node 18+. Many people run it on their PC to build a session or even keep it running daily — it does not have to live on the host.',
     q5: 'What about KataBump rules?',
     a5: 'This tool is for your own server and your own account only, and it is deliberately gentle (at least 23 hours between successful renewals). Still, automation may conflict with any service\'s terms — use it at your own risk.',
+    q6: 'How do I delete my information?',
+    a6: 'Simple and fully automatic: while the script is running, type delete in the console and hit Enter — or run node kata-ut.mjs --delete once. The vault, its key file and session cookies are wiped instantly, with no extra questions, and nothing is left on disk.',
     foot_made: 'Made by', foot_on: 'on GitHub',
-    foot_lic: 'Unlicense — this project belongs to nobody; it is dedicated to the public domain.',
+    foot_lic: 'MIT License © 2026 — this project fully belongs to 6amirreza6. All rights reserved.',
   },
 };
 let LANG = localStorage.getItem('kbu-lang') || 'fa';
