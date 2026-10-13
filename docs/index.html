@@ -119,6 +119,47 @@
   .faq .a{color:var(--dim);font-size:.93rem;padding:0 0 18px}
   .faq .a code{font-family:var(--mono);font-size:.8rem;background:#0b0e1e;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:#c9d4ff;direction:ltr;display:inline-block}
 
+  /* --- my account panel --- */
+  .acc-grid{display:grid;grid-template-columns:1.12fr 1fr;gap:18px;margin-bottom:18px}
+  @media(max-width:880px){.acc-grid{grid-template-columns:1fr}}
+  .acc-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;backdrop-filter:blur(10px)}
+  .acc-card h3{font-size:1.12rem;display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  .acc-card h3 .ic{width:38px;height:38px;border-radius:11px;background:rgba(34,211,238,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .acc-card h3 .ic svg{width:19px;height:19px;color:var(--cyan)}
+  .acc-card .exp{color:var(--dim);font-size:.87rem;margin:2px 0 18px;line-height:1.85}
+  .field{margin-bottom:15px}
+  .field label{display:block;font-size:.86rem;font-weight:700;margin-bottom:7px}
+  .field .hint{color:#7c86a0;font-size:.75rem;margin-top:6px;line-height:1.75}
+  .iwrap{position:relative}
+  .iwrap input{width:100%;background:#0b0e1e;border:1px solid var(--line);border-radius:11px;color:var(--txt);padding:11px 14px;font-family:var(--mono);font-size:.92rem;outline:none;transition:.2s;direction:ltr;text-align:left}
+  .iwrap input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.13)}
+  .iwrap input::placeholder{color:#525b70}
+  .iwrap .eye{position:absolute;top:50%;transform:translateY(-50%);inset-inline-end:7px;background:none;border:0;cursor:pointer;color:var(--dim);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .iwrap .eye:hover{color:var(--cyan)}
+  .iwrap .eye svg{width:16px;height:16px}
+  .btn-save{width:100%;cursor:pointer;border:0;border-radius:12px;padding:13px;background:linear-gradient(90deg,var(--violet),var(--cyan));color:#0b0e1e;font-weight:800;font-size:.95rem;font-family:inherit;transition:.2s;margin-top:4px}
+  .btn-save:hover{filter:brightness(1.12);transform:translateY(-1px)}
+  .kv{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px dashed rgba(255,255,255,.08);font-size:.88rem}
+  .kv:last-child{border-bottom:0}
+  .kv .k{color:var(--dim);font-size:.8rem;flex-shrink:0}
+  .kv .v{font-family:var(--mono);direction:ltr;word-break:break-all;overflow-wrap:anywhere;display:flex;align-items:center;gap:9px;font-size:.85rem}
+  .kv .v .ok{color:var(--green);font-weight:700}
+  .kv .v .eye{background:none;border:0;cursor:pointer;color:var(--dim);width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .kv .v .eye:hover{color:var(--cyan)}
+  .kv .v .eye svg{width:15px;height:15px}
+  .empty{border:1px dashed rgba(255,255,255,.14);border-radius:13px;padding:28px 18px;text-align:center;color:var(--dim);font-size:.87rem;line-height:1.9}
+  .acc-danger{border-color:rgba(248,113,113,.32);background:linear-gradient(135deg,rgba(127,29,29,.2),rgba(14,17,34,.72));display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .acc-danger .dic{width:52px;height:52px;border-radius:15px;background:rgba(248,113,113,.13);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .acc-danger .dic svg{width:25px;height:25px;color:#f87171}
+  .acc-danger .dtxt{flex:1;min-width:240px}
+  .acc-danger h3{font-size:1.05rem;margin-bottom:5px}
+  .acc-danger p{color:var(--dim);font-size:.86rem;line-height:1.85}
+  .btn-del{cursor:pointer;border:1px solid rgba(248,113,113,.45);background:rgba(248,113,113,.12);color:#fca5a5;border-radius:12px;padding:12px 22px;font-weight:800;font-size:.9rem;font-family:inherit;transition:.2s;white-space:nowrap}
+  .btn-del:hover{background:rgba(248,113,113,.22);border-color:#f87171;transform:translateY(-1px)}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,90px);background:#0b0e1e;border:1px solid rgba(52,211,153,.45);color:var(--txt);border-radius:13px;padding:13px 20px;font-size:.9rem;z-index:60;opacity:0;transition:.35s;pointer-events:none;max-width:88vw;box-shadow:0 12px 44px rgba(0,0,0,.55)}
+  #toast.show{transform:translate(-50%,0);opacity:1}
+  #toast.err{border-color:rgba(248,113,113,.55)}
+
   footer{margin-top:80px;border-top:1px solid var(--line);padding:34px 0 44px;text-align:center;color:var(--dim);font-size:.9rem}
   footer .hearts{color:var(--pink)}
   footer a{color:var(--txt);font-weight:700}
@@ -136,7 +177,7 @@
       KataBumpUT
     </a>
     <div class="spacer"></div>
-    <a class="lnk" href="#guide" data-i="nav_guide">راهنما</a>
+    <a class="lnk" href="#account" data-i="nav_account">حساب من</a>
     <a class="lnk" href="#security" data-i="nav_sec">امنیت</a>
     <a class="lnk" href="#faq" data-i="nav_faq">سؤالات</a>
     <a class="lnk" href="https://github.com/6amirreza6/KatabumpUT" target="_blank" rel="noopener">GitHub</a>
@@ -158,9 +199,9 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.7 4.9 17.7 5.2 17.7 5.2c.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
         <span data-i="cta_gh">مشاهده در گیتهاب</span>
       </a>
-      <a class="btn" href="#guide">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <span data-i="cta_guide">شروع سریع</span>
+      <a class="btn" href="#account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+        <span data-i="cta_acc">پنل حساب</span>
       </a>
     </div>
     <div class="badges">
@@ -206,29 +247,47 @@
     </div>
   </div>
 
-  <section class="sec" id="guide">
+  <section class="sec" id="account">
     <div class="wrap">
-      <h2 data-i="guide_h">سه قدم تا آرامش</h2>
-      <p class="lead" data-i="guide_lead">همه‌چیز داخل ترمینال هاست کاتابامپ خودت انجام می‌شه؛ هیچ سایتی یا سرویس بیرونی در کار نیست.</p>
-      <div class="grid3">
-        <div class="card">
-          <div class="num">01</div>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></div>
-          <h3 data-i="s1_h">دانلود کن</h3>
-          <p data-i="s1_p">دستور بالا رو کپی کن و توی ترمینال پنل کاتابامپ اجرا کن. فقط Node 18+ لازمه — هیچ نصب و وابستگی دیگه‌ای نداره.</p>
+      <h2 data-i="acc_h">پنل حساب من</h2>
+      <p class="lead" data-i="acc_lead">همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، هر وقت خواستی ببینش و هر وقت خواستی با یه کلیک پاکش کن. هیچ‌چیز از مرورگرت بیرون نمی‌ره.</p>
+      <div class="acc-grid">
+        <div class="acc-card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span data-i="acc1_h">ورود اطلاعات حساب</span></h3>
+          <p class="exp" data-i="acc1_exp">ایمیل و رمز اکانت کاتابامپت و شناسه‌ی سرورت رو وارد کن و «ذخیره در گاوصخچه» رو بزن؛ اطلاعات همین لحظه با AES-256-GCM رمز می‌شه و فقط توی مرورگر خودت قفل می‌شه — هیچ سروری در کار نیست.</p>
+          <div class="field">
+            <label for="inEmail" data-i="lbl_email">ایمیل کاتابامپ</label>
+            <div class="iwrap"><input id="inEmail" type="email" autocomplete="off" spellcheck="false" placeholder="player@example.com"></div>
+            <div class="hint" data-i="hint_email">همون ایمیلی که باهاش توی پنل کاتابامپ (dashboard.katabump.com) ثبت‌نام کردی.</div>
+          </div>
+          <div class="field">
+            <label for="inPw" data-i="lbl_pw">رمز اکانت</label>
+            <div class="iwrap">
+              <input id="inPw" type="password" autocomplete="new-password" placeholder="••••••••••">
+              <button class="eye" id="eyePw" type="button" aria-label="show / hide password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <div class="hint" data-i="hint_pw">رمز اکانت کاتابامپت؛ رمزنگاری‌شده ذخیره می‌شه و هیچ‌جا نمایش داده نمی‌شه — دکمه‌ی چشم فقط موقتاً نشونش می‌ده.</div>
+          </div>
+          <div class="field">
+            <label for="inSid" data-i="lbl_sid">شناسه‌ی سرور (Server ID)</label>
+            <div class="iwrap"><input id="inSid" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="84521"></div>
+            <div class="hint" data-i="hint_sid">عدد آخر آدرس سرورت توی پنل، مثل /server/84521. چند سرور داری؟ با کاما جدا کن: 84521,84522 — خالی بذاری هم اشکالی نداره.</div>
+          </div>
+          <button class="btn-save" id="btnSave" type="button" data-i="btn_save">ذخیره در گاوصخچه</button>
         </div>
-        <div class="card">
-          <div class="num">02</div>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div>
-          <h3 data-i="s2_h">اطلاعاتت رو وارد کن</h3>
-          <p data-i="s2_p">ایمیل، رمز و <code class="k">Server ID</code> (همون عدد آخر آدرس پنل، مثل <code class="k">/server/84521</code>) رو وارد کن. اطلاعات بلافاصله رمزنگاری و قفل می‌شه.</p>
+        <div class="acc-card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 15h.01M11 15h6"/><circle cx="9" cy="10" r="1.6"/></svg></span><span data-i="acc2_h">اطلاعات حساب</span></h3>
+          <p class="exp" data-i="acc2_exp">اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.</p>
+          <div id="accInfo"></div>
         </div>
-        <div class="card">
-          <div class="num">03</div>
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 3v6h-6"/></svg></div>
-          <h3 data-i="s3_h">رهاش کن</h3>
-          <p data-i="s3_p">با <code class="k">--loop</code> اجراش کن تا هر ۲۴ ساعت خودش تمدید کنه. خروجی رو فقط توی لاگ پنل می‌بینی.</p>
+      </div>
+      <div class="acc-card acc-danger">
+        <div class="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
+        <div class="dtxt">
+          <h3 data-i="acc3_h">حذف حساب از سایت</h3>
+          <p data-i="acc3_exp">با همین یه دکمه، همه‌ی اطلاعاتی که توی این سایت ذخیره کردی — ایمیل، رمز و شناسه‌ی سرور — همان لحظه، خودکار و بدون هیچ سؤالی برای همیشه پاک می‌شه؛ کلید رمزنگاری هم نابود می‌شه و هیچ ردی باقی نمی‌مونه.</p>
         </div>
+        <button class="btn-del" id="btnWipe" type="button" data-i="btn_wipe">حذف اطلاعات من</button>
       </div>
     </div>
   </section>
@@ -292,7 +351,11 @@
       </details>
       <details>
         <summary><span data-i="q6">چطور اطلاعات خودم رو حذف کنم؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="a" data-i="a6">خیلی ساده و کاملاً خودکار: وقتی اسکریپت در حال اجراست، توی کنسول بنویس <code class="k">delete</code> و اینتر بزن — یا یک‌بار <code class="k">node kata-ut.mjs --delete</code> رو اجرا کن. گاوصخچه، فایل کلید و کوکی‌ها همان لحظه و بدون هیچ سؤال اضافه‌ای پاک می‌شن و هیچی روی دیسک نمی‌مونه.</div>
+        <div class="a" data-i="a6">دو راه داری و هر دو کاملاً خودکارن: ۱) توی همین سایت، بخش «پنل حساب من» کارت «حذف حساب از سایت» — فقط دکمه‌ی «حذف اطلاعات من» رو بزن؛ همه‌چیز همان لحظه پاک می‌شه. ۲) برای اسکریپت روی هاست: وقتی در حال اجراست توی کنسول بنویس <code class="k">delete</code> یا یک‌بار <code class="k">node kata-ut.mjs --delete</code> رو اجرا کن؛ گاوصخچه، فایل کلید و کوکی‌ها بدون هیچ سؤالی پاک می‌شن.</div>
+      </details>
+      <details>
+        <summary><span data-i="q7">اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="a" data-i="a7">هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.</div>
       </details>
     </div>
   </section>
@@ -304,6 +367,8 @@
     </div>
   </footer>
 </main>
+
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ---- starfield ---- */
@@ -369,21 +434,37 @@
 const I18N = {
   fa: {
     copy: 'کپی', copied: 'کپی شد!',
-    nav_guide: 'راهنما', nav_sec: 'امنیت', nav_faq: 'سؤالات',
+    nav_account: 'حساب من', nav_sec: 'امنیت', nav_faq: 'سؤالات',
     pill: 'متن‌باز و رایگان · نگهداری خودکار سرور رایگان KataBump',
     hero_sub: 'سرور رایگان کاتابامپت رو <b>هر ۲۴ ساعت خودکار</b> تمدید کن — فقط ایمیل، رمز و <b>شناسه‌ی سرور</b>ت رو وارد کن؛ بقیه‌اش با گاوصخچه‌ی رمزگذاری‌شده انجام می‌شه.',
-    cta_gh: 'مشاهده در گیتهاب', cta_guide: 'شروع سریع',
+    cta_gh: 'مشاهده در گیتهاب', cta_acc: 'پنل حساب',
     b1: 'چرخه‌ی خودکار', b2: 'گاوصخچه‌ی رمزنگاری', b3: 'وابستگی', b4: '© تمام حقوق برای 6amirreza6',
     panel_h: 'پنل پرواز', panel_hint: 'این‌طور به‌نظر می‌رسه وقتی اسکریپت روی هاست خودت اجرا می‌شه — بدون هیچ دخالتی.',
     st1: 'تمدید بعدی تا', st2: 'گاوصخچه: قفل و ایمن', st3: 'سرور: زنده و تمدیدشده',
-    guide_h: 'سه قدم تا آرامش',
-    guide_lead: 'همه‌چیز داخل ترمینال هاست کاتابامپ خودت انجام می‌شه؛ هیچ سایتی یا سرویس بیرونی در کار نیست.',
-    s1_h: 'دانلود کن',
-    s1_p: 'دستور بالا رو کپی کن و توی ترمینال پنل کاتابامپ اجرا کن. فقط Node 18+ لازمه — هیچ نصب و وابستگی دیگه‌ای نداره.',
-    s2_h: 'اطلاعاتت رو وارد کن',
-    s2_p: 'ایمیل، رمز و Server ID (همون عدد آخر آدرس پنل، مثل /server/84521) رو وارد کن. اطلاعات بلافاصله رمزنگاری و قفل می‌شه.',
-    s3_h: 'رهاش کن',
-    s3_p: 'با --loop اجراش کن تا هر ۲۴ ساعت خودش تمدید کنه. خروجی رو فقط توی لاگ پنل می‌بینی.',
+    acc_h: 'پنل حساب من',
+    acc_lead: 'همه‌چیز همین‌جا داخل سایت انجام می‌شه: اطلاعات حسابت رو وارد کن، هر وقت خواستی ببینش و هر وقت خواستی با یه کلیک پاکش کن. هیچ‌چیز از مرورگرت بیرون نمی‌ره.',
+    acc1_h: 'ورود اطلاعات حساب',
+    acc1_exp: 'ایمیل و رمز اکانت کاتابامپت و شناسه‌ی سرورت رو وارد کن و «ذخیره در گاوصخچه» رو بزن؛ اطلاعات همین لحظه با AES-256-GCM رمز می‌شه و فقط توی مرورگر خودت قفل می‌شه — هیچ سروری در کار نیست.',
+    lbl_email: 'ایمیل کاتابامپ',
+    hint_email: 'همون ایمیلی که باهاش توی پنل کاتابامپ (dashboard.katabump.com) ثبت‌نام کردی.',
+    lbl_pw: 'رمز اکانت',
+    hint_pw: 'رمز اکانت کاتابامپت؛ رمزنگاری‌شده ذخیره می‌شه و هیچ‌جا نمایش داده نمی‌شه — دکمه‌ی چشم فقط موقتاً نشونش می‌ده.',
+    lbl_sid: 'شناسه‌ی سرور (Server ID)',
+    hint_sid: 'عدد آخر آدرس سرورت توی پنل، مثل /server/84521. چند سرور داری؟ با کاما جدا کن: 84521,84522 — خالی بذاری هم اشکالی نداره.',
+    btn_save: 'ذخیره در گاوصخچه',
+    acc2_h: 'اطلاعات حساب',
+    acc2_exp: 'اینجا اطلاعات ذخیره‌شده‌ی حسابت رو می‌بینی؛ رمزت ماسک‌شده‌ست و فقط با دکمه‌ی چشم موقتاً نمایان می‌شه.',
+    kv_email: 'ایمیل', kv_pw: 'رمز', kv_sid: 'شناسه‌ی سرور', kv_enc: 'وضعیت', kv_at: 'ذخیره در',
+    acc_empty: 'هنوز چیزی ذخیره نشده — از بخش «ورود اطلاعات حساب» اطلاعاتت رو وارد کن و ذخیره رو بزن.',
+    show: 'نمایش', hide: 'پنهان',
+    acc3_h: 'حذف حساب از سایت',
+    acc3_exp: 'با همین یه دکمه، همه‌ی اطلاعاتی که توی این سایت ذخیره کردی — ایمیل، رمز و شناسه‌ی سرور — همان لحظه، خودکار و بدون هیچ سؤالی برای همیشه پاک می‌شه؛ کلید رمزنگاری هم نابود می‌شه و هیچ ردی باقی نمی‌مونه.',
+    btn_wipe: 'حذف اطلاعات من',
+    saved_toast: 'اطلاعات حسابت ذخیره و رمزنگاری شد ✓',
+    wipe_toast: 'همه‌ی اطلاعات حسابت از این مرورگر برای همیشه پاک شد',
+    err_email: 'یه ایمیل معتبر وارد کن',
+    err_pw: 'رمز اکانت رو وارد کن',
+    err_sid: 'شناسه‌ی سرور فقط باید عدد باشه؛ برای چند سرور با کاما جدا کن',
     feat_h: 'چرا خفنه؟',
     f1_h: 'چرخه‌ی ۲۴ ساعته', f1_p: 'هر شب یه دور تمدید؛ اگه یه تلاش شکست بخوره، ۱۵ دقیقه بعد دوباره امتحان می‌کنه تا بالاخره بشه.',
     f2_h: 'گاوصخچه‌ی رمزنگاری‌شده', f2_p: 'ایمیل و رمزت هیچ‌وقت به‌صورت متن ساده روی دیسک نمی‌شینه؛ با AES-256-GCM قفل می‌شن و کلیدشون دو تکه می‌شه.',
@@ -410,27 +491,45 @@ const I18N = {
     q5: 'قوانین کاتابامپ چی؟',
     a5: 'این ابزار فقط برای سرور و اکانت خودته و رفتارش عمداً ملایمه (حداقل ۲۳ ساعت بین تمدیدهای موفق). با این حال اتوماسیون ممکنه با قوانین هر سرویسی ناسازگار باشه — مسئولیت استفاده با خودته.',
     q6: 'چطور اطلاعات خودم رو حذف کنم؟',
-    a6: 'خیلی ساده و کاملاً خودکار: وقتی اسکریپت در حال اجراست، توی کنسول بنویس delete و اینتر بزن — یا یک‌بار node kata-ut.mjs --delete رو اجرا کن. گاوصخچه، فایل کلید و کوکی‌ها همان لحظه و بدون هیچ سؤال اضافه‌ای پاک می‌شن و هیچی روی دیسک نمی‌مونه.',
+    a6: 'دو راه داری و هر دو کاملاً خودکارن: ۱) توی همین سایت، بخش «پنل حساب من» کارت «حذف حساب از سایت» — دکمه‌ی «حذف اطلاعات من» رو بزن و تمام. ۲) برای اسکریپت روی هاست: وقتی در حال اجراست توی کنسول بنویس delete یا یک‌بار node kata-ut.mjs --delete رو اجرا کن؛ گاوصخچه، فایل کلید و کوکی‌ها بدون هیچ سؤالی پاک می‌شن.',
+    q7: 'اطلاعاتی که توی سایت ذخیره می‌کنم کجا می‌ره؟',
+    a7: 'هیچ‌جا نمی‌ره! فقط داخل مرورگر خودت (localStorage) ذخیره می‌شه، به‌صورت AES-256-GCM رمز می‌شه و به هیچ سروری ارسال نمی‌شه. با دکمه‌ی «حذف اطلاعات من» هم داده و کلید رمزنگاری با هم برای همیشه نابود می‌شن.',
     foot_made: 'ساخته‌شده توسط', foot_on: 'در گیتهاب',
     foot_lic: 'لایسنس MIT © 2026 — این پروژه به‌طور کامل متعلق به 6amirreza6 است؛ تمام حقوق محفوظ است.',
   },
   en: {
     copy: 'Copy', copied: 'Copied!',
-    nav_guide: 'Guide', nav_sec: 'Security', nav_faq: 'FAQ',
+    nav_account: 'My account', nav_sec: 'Security', nav_faq: 'FAQ',
     pill: 'Free & open source · keep your free KataBump server alive',
     hero_sub: 'Auto-renew your free KataBump server <b>every 24 hours</b> — just enter your email, password and <b>Server ID</b>; the encrypted vault handles the rest.',
-    cta_gh: 'View on GitHub', cta_guide: 'Quick start',
+    cta_gh: 'View on GitHub', cta_acc: 'Account panel',
     b1: 'auto cycle', b2: 'encrypted vault', b3: 'dependencies', b4: '© 6amirreza6 — all rights reserved',
     panel_h: 'Flight panel', panel_hint: 'This is what it looks like while running on your own host — zero manual work.',
     st1: 'Next renewal in', st2: 'Vault: locked & safe', st3: 'Server: alive & renewed',
-    guide_h: 'Three steps to peace of mind',
-    guide_lead: 'Everything happens inside your own KataBump host terminal — no third-party site or service involved.',
-    s1_h: 'Download',
-    s1_p: 'Copy the command above and run it in the KataBump panel terminal. You only need Node 18+ — nothing to install, zero dependencies.',
-    s2_h: 'Enter your info',
-    s2_p: 'Type your email, password and Server ID (the number at the end of your panel URL, like /server/84521). Your info is encrypted and locked instantly.',
-    s3_h: 'Let it fly',
-    s3_p: 'Run it with --loop and it renews itself every 24 hours. You just watch the panel logs.',
+    acc_h: 'My account panel',
+    acc_lead: 'Everything happens right here on this page: enter your account info, view it whenever you like and wipe it with one click. Nothing ever leaves your browser.',
+    acc1_h: 'Enter account info',
+    acc1_exp: 'Type your KataBump email, account password and Server ID, then hit “Save to vault” — your info is sealed with AES-256-GCM on the spot and locked inside your own browser. No server involved.',
+    lbl_email: 'KataBump email',
+    hint_email: 'The email you signed up with on the KataBump panel (dashboard.katabump.com).',
+    lbl_pw: 'Account password',
+    hint_pw: 'Your KataBump account password; it is stored encrypted and never shown — the eye button only reveals it temporarily.',
+    lbl_sid: 'Server ID',
+    hint_sid: 'The number at the end of your server URL in the panel, like /server/84521. Multiple servers? Separate with commas: 84521,84522 — leaving it empty is fine too.',
+    btn_save: 'Save to vault',
+    acc2_h: 'Account info',
+    acc2_exp: 'Your saved account info; the password is masked and only revealed temporarily with the eye button.',
+    kv_email: 'Email', kv_pw: 'Password', kv_sid: 'Server ID', kv_enc: 'Status', kv_at: 'Saved at',
+    acc_empty: 'Nothing saved yet — enter your info in the “Enter account info” section and hit Save.',
+    show: 'Show', hide: 'Hide',
+    acc3_h: 'Delete account from the site',
+    acc3_exp: 'One click wipes everything you saved on this site — email, password and Server ID — instantly, automatically and forever. The encryption key is destroyed too, so no trace is left behind.',
+    btn_wipe: 'Delete my info',
+    saved_toast: 'Your account info was saved and encrypted ✓',
+    wipe_toast: 'All of your account info was permanently wiped from this browser',
+    err_email: 'Enter a valid email',
+    err_pw: 'Enter your account password',
+    err_sid: 'Server ID must be numbers only; separate multiple servers with commas',
     feat_h: 'Why it rocks',
     f1_h: '24h cycle', f1_p: 'One renewal run every day; if an attempt fails it retries after 15 minutes until it succeeds.',
     f2_h: 'Encrypted vault', f2_p: 'Your email and password never sit on disk in plain text — sealed with AES-256-GCM and the key is split in two.',
@@ -457,7 +556,9 @@ const I18N = {
     q5: 'What about KataBump rules?',
     a5: 'This tool is for your own server and your own account only, and it is deliberately gentle (at least 23 hours between successful renewals). Still, automation may conflict with any service\'s terms — use it at your own risk.',
     q6: 'How do I delete my information?',
-    a6: 'Simple and fully automatic: while the script is running, type delete in the console and hit Enter — or run node kata-ut.mjs --delete once. The vault, its key file and session cookies are wiped instantly, with no extra questions, and nothing is left on disk.',
+    a6: 'Two ways, both fully automatic: 1) right here on this site — the “My account panel” section, “Delete account from the site” card: press “Delete my info” and it is done instantly. 2) For the script on your host: type delete in the console while it runs, or run node kata-ut.mjs --delete once; the vault, its key file and session cookies are wiped with no extra questions.',
+    q7: 'Where does the info I save on the site go?',
+    a7: 'Nowhere! It stays inside your own browser (localStorage), is sealed with AES-256-GCM and is never sent to any server. The “Delete my info” button destroys both the data and the encryption key forever.',
     foot_made: 'Made by', foot_on: 'on GitHub',
     foot_lic: 'MIT License © 2026 — this project fully belongs to 6amirreza6. All rights reserved.',
   },
@@ -476,8 +577,97 @@ function applyLang() {
   btn.textContent = LANG === 'fa' ? 'EN' : 'فا';
   localStorage.setItem('kbu-lang', LANG);
 }
-document.getElementById('langBtn').addEventListener('click', () => { LANG = LANG === 'fa' ? 'en' : 'fa'; applyLang(); });
+document.getElementById('langBtn').addEventListener('click', () => { LANG = LANG === 'fa' ? 'en' : 'fa'; applyLang(); if (window.__renderAcc) window.__renderAcc(); });
 applyLang();
+
+/* ---- my account panel: browser-local encrypted vault (AES-256-GCM) ---- */
+(() => {
+  const VKEY = 'kbu-dk', VDATA = 'kbu-vault';
+  const $ = id => document.getElementById(id);
+  const tenc = new TextEncoder(), tdec = new TextDecoder();
+  const b64e = u8 => btoa(String.fromCharCode(...u8));
+  const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const eyeSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const row = (k, v) => '<div class="kv"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+  let revealPw = false;
+
+  async function getKey() {
+    const raw = localStorage.getItem(VKEY);
+    if (raw) { try { return await crypto.subtle.importKey('jwk', JSON.parse(raw), {name:'AES-GCM'}, true, ['encrypt','decrypt']); } catch (e) {} }
+    const k = await crypto.subtle.generateKey({name:'AES-GCM', length:256}, true, ['encrypt','decrypt']);
+    localStorage.setItem(VKEY, JSON.stringify(await crypto.subtle.exportKey('jwk', k)));
+    return k;
+  }
+  async function seal(obj) {
+    const k = await getKey(), iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, k, tenc.encode(JSON.stringify(obj))));
+    return {iv: b64e(iv), ct: b64e(ct)};
+  }
+  async function unseal(p) {
+    try {
+      const k = await getKey();
+      return JSON.parse(tdec.decode(await crypto.subtle.decrypt({name:'AES-GCM', iv: b64d(p.iv)}, k, b64d(p.ct))));
+    } catch (e) { return null; }
+  }
+  function readVault() {
+    const raw = localStorage.getItem(VDATA);
+    return raw ? unseal(JSON.parse(raw)) : Promise.resolve(null);
+  }
+  function toast(msg, isErr) {
+    const t = $('toast');
+    t.textContent = msg; t.classList.toggle('err', !!isErr); t.classList.add('show');
+    clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 3400);
+  }
+
+  async function renderInfo() {
+    const box = $('accInfo'), d = I18N[LANG];
+    const acc = await readVault();
+    if (!acc) { box.innerHTML = '<div class="empty">' + d.acc_empty + '</div>'; return; }
+    const masked = '\u2022'.repeat(Math.max(6, Math.min(acc.pw.length, 14)));
+    const pwHtml = (revealPw ? esc(acc.pw) : masked) +
+      '<button class="eye" id="eyeInfo" type="button" title="' + (revealPw ? d.hide : d.show) + '">' + eyeSvg + '</button>';
+    const dt = new Date(acc.at).toLocaleDateString(LANG === 'fa' ? 'fa-IR' : 'en-US');
+    box.innerHTML =
+      row(d.kv_email, esc(acc.email)) +
+      row(d.kv_pw, pwHtml) +
+      row(d.kv_sid, esc(acc.sids || '\u2014')) +
+      row(d.kv_enc, '<span class="ok">\u2713 AES-256-GCM</span>') +
+      row(d.kv_at, esc(dt));
+    $('eyeInfo').addEventListener('click', () => { revealPw = !revealPw; renderInfo(); });
+  }
+  window.__renderAcc = renderInfo;
+
+  $('eyePw').addEventListener('click', () => {
+    const i = $('inPw'); i.type = i.type === 'password' ? 'text' : 'password';
+  });
+
+  $('btnSave').addEventListener('click', async () => {
+    const d = I18N[LANG];
+    const email = $('inEmail').value.trim();
+    const pw = $('inPw').value;
+    const sids = $('inSid').value.replace(/\s+/g, '');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast(d.err_email, 1); return; }
+    if (!pw) { toast(d.err_pw, 1); return; }
+    if (sids && !/^\d+(,\d+)*$/.test(sids)) { toast(d.err_sid, 1); return; }
+    localStorage.removeItem(VDATA);
+    localStorage.setItem(VDATA, JSON.stringify(await seal({email: email, pw: pw, sids: sids, at: Date.now()})));
+    $('inPw').value = ''; $('inPw').type = 'password';
+    revealPw = false;
+    toast(d.saved_toast);
+    renderInfo();
+  });
+
+  $('btnWipe').addEventListener('click', () => {
+    localStorage.removeItem(VDATA);
+    localStorage.removeItem(VKEY);
+    revealPw = false;
+    toast(I18N[LANG].wipe_toast);
+    renderInfo();
+  });
+
+  renderInfo();
+})();
 </script>
 
 </body>

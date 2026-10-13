@@ -1,6 +1,6 @@
 {
   "name": "katabump-ut",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Auto-renew your free KataBump server every 24h with an AES-256 encrypted vault — تمدید خودکار سرور رایگان کاتابامپ",
   "main": "kata-ut.mjs",
   "type": "module",
